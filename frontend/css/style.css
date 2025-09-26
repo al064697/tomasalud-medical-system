@@ -334,3 +334,16 @@ body {
     border-radius: 4px;
 }
 
+/* Utility classes for messages */
+.login-message-hidden {
+    margin-top: 15px;
+    display: none;
+}
+
+.register-message-hidden {
+    display: none;
+}
+
+.register-message-visible {
+    display: block;
+}

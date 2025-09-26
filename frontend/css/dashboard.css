@@ -198,3 +198,18 @@ body {
 .action-button:hover {
     background-color: #2a4755;
 }
+
+/* Utility classes for replacing inline styles */
+.text-center-muted {
+    text-align: center;
+    color: #999;
+}
+
+.modal-hidden {
+    display: none;
+}
+
+.login-message {
+    margin-top: 15px;
+    display: none;
+}

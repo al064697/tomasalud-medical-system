@@ -4,12 +4,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function showMessage(text, isError = false) {
         messageDiv.innerHTML = text;
-        messageDiv.className = isError ? 'error-message' : 'success-message';
-        messageDiv.style.display = 'block';
+        messageDiv.className = isError ? 'error-message register-message-visible' : 'success-message register-message-visible';
+        messageDiv.classList.remove('register-message-hidden');
     }
     
     function hideMessage() {
-        messageDiv.style.display = 'none';
+        messageDiv.classList.add('register-message-hidden');
+        messageDiv.classList.remove('register-message-visible');
     }
     
     if (form) {

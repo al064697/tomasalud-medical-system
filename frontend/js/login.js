@@ -5,11 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function showMessage(text, isError = false) {
         messageDiv.innerHTML = text;
         messageDiv.className = isError ? 'error-message' : 'success-message';
-        messageDiv.style.display = 'block';
+        messageDiv.classList.remove('login-message-hidden');
     }
     
     function hideMessage() {
-        messageDiv.style.display = 'none';
+        messageDiv.classList.add('login-message-hidden');
     }
     
     if (form) {
