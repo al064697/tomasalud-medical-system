@@ -1,0 +1,336 @@
+:root {
+    --primary-color: #41c1ba;
+    --text-color: #333;
+    --button-color: #325866;
+    --white: #fff;
+    --heading-color: #325866; 
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.left-panel {
+    background-color: var(--primary-color);
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.logo-image {
+    max-width: 90%;
+    height: auto;
+}
+
+.right-panel {
+    background-color: var(--white);
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    max-width: 350px;
+}
+
+.user-icon-image {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 30px;
+    
+}
+
+.input-group {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.register-link {
+    color: #6c7a89;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+}
+
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--button-color);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #2a4755;
+}
+
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    max-width: 350px;
+}
+
+.registration-form h1 {
+    font-size: 2rem;
+    color: var(--heading-color);
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+.register-button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--button-color);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.register-button:hover {
+    background-color: #2a4755;
+}
+
+
+/* Agrega estos estilos al final de tu archivo style.css */
+
+/* --- ESTILOS ESPECÍFICOS DEL DASHBOARD --- */
+
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f0f0f0; /* Fondo gris claro */
+    font-family: Arial, sans-serif;
+}
+
+.dashboard-header {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+}
+
+.logo-area .logo-image {
+    width: 40px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.logo-area .logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--white);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    color: var(--white);
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.user-profile .user-icon {
+    width: 35px;
+    height: 35px;
+    background-color: var(--button-color); /* Color de fondo del ícono */
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+.dashboard-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    gap: 30px;
+}
+
+.treatments-panel,
+.medications-panel {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    height: 100%;
+    width: 400px; /* Ancho fijo para las tarjetas */
+    display: flex;
+    flex-direction: column;
+}
+
+.treatments-panel .panel-title {
+    display: none; /* Oculta el título del panel de tratamientos para que se vea como en la imagen */
+}
+
+.treatment-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex: 1; /* Permite que la lista se expanda */
+}
+
+.treatment-list li {
+    padding: 15px;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.treatment-list li:hover {
+    background-color: #f0f0f0;
+}
+
+.panel-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: auto; /* Empuja el footer al final del panel */
+}
+
+.add-button {
+    background-color: var(--white);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.medications-panel {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #999;
+}
+
+.dashboard-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: var(--secondary-color); /* Un color neutro para el footer */
+}
+
+.action-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: var(--button-color);
+    color: var(--white);
+    transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+    background-color: #2a4755;
+}
+
+/* === ESTILOS PARA ELEMENTOS SELECCIONADOS === */
+.treatment-item.selected,
+.medication-item.selected {
+    background-color: var(--primary-color) !important;
+    color: var(--white) !important;
+    border: 2px solid var(--primary-color);
+    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(65, 193, 186, 0.3);
+}
+
+.treatment-item,
+.medication-item {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.treatment-item:hover,
+.medication-item:hover {
+    background-color: #f8f9fa !important;
+    transform: translateX(2px);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.treatment-item.selected:hover,
+.medication-item.selected:hover {
+    background-color: var(--primary-color) !important;
+    color: var(--white) !important;
+}
+
+/* Mensajes de error y éxito mejorados */
+.error-message {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+    padding: 8px 12px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+}
+
+.success-message {
+    color: #155724;
+    font-size: 14px;
+    margin-top: 5px;
+    padding: 8px 12px;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+}
+

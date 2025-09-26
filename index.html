@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TomaSalud - Página Principal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e8;
+            border-radius: 8px;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏥 TomaSalud</h1>
+        <p>Sistema de Gestión de Tratamientos Médicos</p>
+        
+        <div class="status">
+            ✅ Frontend: Desplegado en Vercel<br>
+            ⚠️ Backend: Solo en desarrollo local<br>
+            ℹ️ Demo: Funcionalidad frontend completa
+        </div>
+        
+        <div class="links">
+            <a href="frontend/pages/index.html" class="btn">🔐 Iniciar Sesión</a>
+            <a href="frontend/pages/registro.html" class="btn">📝 Registrarse</a>
+            <a href="frontend/pages/dashboard.html" class="btn">📊 Dashboard</a>
+            <a href="#" class="btn" onclick="alert('Backend API no disponible en producción')">📚 API Docs</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+# Este archivo permite que app sea importado como módulo

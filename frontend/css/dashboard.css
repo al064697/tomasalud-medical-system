@@ -1,0 +1,200 @@
+:root {
+    --primary-color: #41c1ba;
+    --secondary-color: #f0f0f0;
+    --text-color: #333;
+    --button-color: #325866;
+    --white: #fff;
+    --card-background: #fff;
+    --shadow-color: rgba(0, 0, 0, 0.15);
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--secondary-color);
+}
+
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.dashboard-header {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+}
+
+.logo-area .logo-image {
+    width: 60px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.logo-area .logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--white);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    color: var(--white);
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.user-profile .user-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+.dashboard-content {
+    flex: 1;
+    display: flex;
+    padding: 50px;
+    gap: 30px;
+}
+
+.treatments-panel,
+.medications-panel {
+    background-color: var(--card-background);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    padding: 20px;
+    height: 100%;
+    width: 50%; 
+    display: flex;
+    flex-direction: column;
+}
+
+.treatment-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+}
+
+.treatment-list li {
+    padding: 15px;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.treatment-list li:hover {
+    background-color: #f0f0f0;
+}
+
+.panel-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+}
+
+.add-button {
+    background-color: var(--card-background);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.treatment-item {
+    list-style: none;
+    padding: 12px 15px;
+    margin: 5px 0;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.treatment-item:hover {
+    background-color: #e8f5e8;
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.treatment-list {
+    padding: 0;
+    margin: 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.medications-panel {
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
+    color: var(--text-color);
+    padding: 20px;
+}
+
+.medications-panel h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 5px;
+}
+
+.medications-panel ul {
+    list-style: none;
+    padding: 0;
+}
+
+.medications-panel li {
+    padding: 8px 12px;
+    margin: 5px 0;
+    background-color: #f5f5f5;
+    border-left: 4px solid var(--primary-color);
+    border-radius: 3px;
+}
+
+.dashboard-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: var(--secondary-color);
+}
+
+.action-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: var(--button-color);
+    color: var(--white);
+    transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+    background-color: #2a4755;
+}

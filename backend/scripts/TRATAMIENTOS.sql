@@ -1,0 +1,45 @@
+-- Crear base de datos con el nombre correcto
+CREATE DATABASE IF NOT EXISTS alarma_medicamentos;
+USE alarma_medicamentos; -- ⚠️ Corregir: estaba "TRATAMIENTOS"
+
+-- Eliminar tablas si existen (para recrear estructura)
+DROP TABLE IF EXISTS ALARMA; 
+DROP TABLE IF EXISTS HISTORIAL;
+DROP TABLE IF EXISTS MEDICAMENTO;
+DROP TABLE IF EXISTS TRATAMIENTO;
+DROP TABLE IF EXISTS USUARIO;
+
+-- Crear tabla USUARIO
+CREATE TABLE USUARIO (
+    ID_USUARIO INT PRIMARY KEY AUTO_INCREMENT,
+    NOMBRE VARCHAR(50) NOT NULL, -- ⚠️ Corregir: estaba "VAR CHAR"
+    CORREO VARCHAR(100) NOT NULL UNIQUE,
+    CONTRASENA_HASH VARCHAR(255) NOT NULL,
+    SEXO BOOLEAN NOT NULL COMMENT '0=Femenino, 1=Masculino', -- ✅ BOOLEAN
+    FECHA_NACIMIENTO DATE NOT NULL,
+    TIPO_SANGRE ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'),
+    DONADOR_ORGANOS BOOLEAN DEFAULT FALSE, -- ✅ BOOLEAN
+    ALERGIAS TEXT,
+    PADECIMIENTOS TEXT,
+    ROL ENUM('ADMIN', 'USUARIO') DEFAULT 'USUARIO',
+    FECHA_REGISTRO TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Resto de tablas...
+CREATE TABLE TRATAMIENTO (
+    ID_TRATAMIENTO INT PRIMARY KEY AUTO_INCREMENT,
+    ID_USUARIO INT NOT NULL,
+    NOMBRE_TRATAMIENTO VARCHAR(50) NOT NULL,
+    FECHA_INICIO DATE NOT NULL,
+    FECHA_FIN DATE,
+    ESTADO ENUM('Activo', 'Suspendido', 'Finalizado') DEFAULT 'Activo',
+    FECHA_CREACION TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ID_USUARIO) REFERENCES USUARIO(ID_USUARIO) ON DELETE CASCADE
+);
+
+-- Insertar datos de ejemplo con BOOLEAN
+INSERT INTO USUARIO (NOMBRE, CORREO, CONTRASENA_HASH, SEXO, FECHA_NACIMIENTO, TIPO_SANGRE, DONADOR_ORGANOS, ALERGIAS, PADECIMIENTOS, ROL) VALUES
+('Juan Pérez', 'juan@email.com', '$2b$12$hash_ejemplo', TRUE, '1985-03-15', 'O+', TRUE, 'Penicilina', 'Hipertensión', 'USUARIO'), -- SEXO=TRUE (Masculino)
+('María García', 'maria@email.com', '$2b$12$hash_ejemplo', FALSE, '1990-07-22', 'A+', FALSE, 'Ninguna', 'Diabetes', 'USUARIO'), -- SEXO=FALSE (Femenino)
+('Carlos López', 'carlos@email.com', '$2b$12$hash_ejemplo', TRUE, '1978-11-08', 'B-', TRUE, 'Aspirina', 'Ninguno', 'ADMIN'),
+('Ana Martínez', 'ana@email.com', '$2b$12$hash_ejemplo', FALSE, '1992-05-30', 'AB+', FALSE, 'Polen', 'Asma', 'USUARIO');

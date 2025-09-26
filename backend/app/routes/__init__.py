@@ -1,0 +1,1 @@
+# Este archivo permite que routes sea importado como módulo

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TomaSalud - Panel de Control</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+    <main class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="logo-area">
+                <img src="../images/logo.png" alt="Logo de TomaSalud" class="logo-image">
+                <span class="logo-text">TomaSalud</span>
+            </div>
+            <div class="user-profile">
+                <span class="username">Usuario</span>
+                <img src="../images/usuario.png" alt="Icono de usuario" class="user-icon">
+            </div>
+        </header>
+
+        <!-- Creación de los paneles-->
+        <section class="dashboard-content">
+            <div class="treatments-panel">
+                <div class="treatments-panel-header">
+                    <h3 class="panel-title">Tratamientos</h3>
+                    <div class="treatments-header-buttons">
+                        <!-- botones de accion tratamientos -->
+                        <button class="action-button edit-button-treatments">Editar</button>
+                        <button class="action-button delete-button-treatments">Eliminar</button>
+                    </div>
+                </div>
+
+            <div class="medications-panel">
+                <p>Selecciona un tratamiento para ver sus medicamentos</p>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            <button class="action-button">Exportar a PDF</button>
+            <button class="action-button">Salir</button>
+        </footer>
+    </main>
+
+    <!-- Aquí enlazas tu archivo dashboard.js -->
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>
