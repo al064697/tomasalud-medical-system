@@ -12,6 +12,7 @@ from app.schemas import usuario as schemas_usuario
 from app.schemas import auth as schemas_auth
 from app.auth import pwd_context
 from datetime import datetime
+import hashlib
 
 router = APIRouter()
 
@@ -39,15 +40,19 @@ def registrar_usuario(usuario_data: schemas_auth.UsuarioRegister, db: Session = 
             detail="El correo electrónico ya está registrado"
         )
     
-    # Hashear la contraseña
-    hashed_password = pwd_context.hash(usuario_data.contrasena)
+    # Hashear la contraseña usando hashlib como alternativa temporal
+    # hashed_password = pwd_context.hash(usuario_data.contrasena)
+    hashed_password = hashlib.sha256(usuario_data.contrasena.encode()).hexdigest()
+    
+    # Convertir sexo de string a boolean (True = Masculino, False = Femenino)
+    sexo_bool = usuario_data.sexo.lower() in ['masculino', 'true', '1', 'hombre', 'm']
     
     # Crear el usuario
     db_usuario = models.usuario.Usuario(
         NOMBRE=usuario_data.nombre,
         CORREO=usuario_data.correo,
         CONTRASENA_HASH=hashed_password,
-        SEXO=usuario_data.sexo,
+        SEXO=sexo_bool,
         FECHA_NACIMIENTO=usuario_data.fecha_nacimiento,
         TIPO_SANGRE=usuario_data.tipo_sangre,
         DONADOR_ORGANOS=usuario_data.donador_organos,

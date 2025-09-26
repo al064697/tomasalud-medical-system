@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('📤 Enviando datos:', userData);
                 
                 // ✅ CAMBIO: Conectar al backend en lugar de simulación
-                const response = await fetch('http://localhost:8000/usuarios/', {
+                const response = await fetch('http://127.0.0.1:8004/auth/registro', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

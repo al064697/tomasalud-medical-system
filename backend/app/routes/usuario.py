@@ -25,7 +25,12 @@ def get_db():
 # Crear usuario
 @router.post("/", response_model=schemas_usuario.UsuarioOut)
 def create_usuario(usuario: schemas_usuario.UsuarioCreate, db: Session = Depends(get_db)):
-    db_usuario = models.usuario.Usuario(**usuario.dict())
+    # Convertir a dict y procesar la contraseña
+    usuario_data = usuario.dict()
+    contrasena = usuario_data.pop('CONTRASEÑA')  # Extraer contraseña
+    usuario_data['CONTRASENA_HASH'] = f"hash_{contrasena}"  # Hash simple por ahora
+    
+    db_usuario = models.usuario.Usuario(**usuario_data)
     db.add(db_usuario)
     db.commit()
     db.refresh(db_usuario)

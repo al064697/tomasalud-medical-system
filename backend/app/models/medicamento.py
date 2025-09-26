@@ -23,4 +23,7 @@ class Medicamento(Base):
     FECHA_CREACION = Column(TIMESTAMP, server_default=func.now()) 
 
     # Relación con Tratamiento
-    tratamiento = relationship("Tratamiento", backref="medicamentos")
+    tratamiento = relationship("Tratamiento", back_populates="medicamentos")
+    
+    # Relación con Alarmas
+    alarmas = relationship("Alarma", back_populates="medicamento", cascade="all, delete-orphan")

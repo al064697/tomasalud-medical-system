@@ -18,10 +18,7 @@ class Alarma(Base):
     ID_MEDICAMENTO = Column(Integer, ForeignKey("MEDICAMENTO.ID_MEDICAMENTO"), nullable=False)
     HORA_PROGRAMADA = Column(DateTime, nullable=False)
     ESTADO = Column(Enum('PENDIENTE', 'ENVIADA', 'TOMADA', 'POSPUESTA', 'CANCELADA'), default='PENDIENTE')
-    INTENTOS_NOTIFICACION = Column(Integer, default=0)
-    TIEMPO_POSPOSICION = Column(Integer, default=15)  # minutos
-    ACTIVA = Column(Boolean, default=True)
-    FECHA_CREACION = Column(TIMESTAMP, server_default=func.now())
+    INTERVALO_POSPOSICION = Column(Integer, nullable=True)  # minutos
 
     # Relación
     medicamento = relationship("Medicamento", back_populates="alarmas")
