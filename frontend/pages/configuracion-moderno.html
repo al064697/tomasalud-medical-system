@@ -468,19 +468,19 @@
             <nav>
                 <ul class="sidebar-nav">
                     <li class="nav-item">
-                        <a href="dashboard-moderno.html" class="nav-link">
+                        <a href="../dashboard.html" class="nav-link">
                             <i class="nav-icon fas fa-home"></i>
                             Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="dashboard-moderno.html" class="nav-link">
+                        <a href="../dashboard.html" class="nav-link">
                             <i class="nav-icon fas fa-clipboard-list"></i>
                             Tratamientos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="dashboard-moderno.html" class="nav-link">
+                        <a href="../dashboard.html" class="nav-link">
                             <i class="nav-icon fas fa-pills"></i>
                             Medicamentos
                         </a>
@@ -913,7 +913,7 @@
                     const token = localStorage.getItem('token');
                     
                     if (!userData || !token) {
-                        window.location.href = 'index-moderno.html';
+                        window.location.href = '../index.html';
                         return;
                     }
                     
@@ -928,7 +928,7 @@
                     
                 } catch (error) {
                     console.error('Error initializing app:', error);
-                    window.location.href = 'index-moderno.html';
+                    window.location.href = '../index.html';
                 }
             },
 
@@ -987,7 +987,7 @@
                 document.getElementById('logout-btn').addEventListener('click', () => {
                     localStorage.clear();
                     sessionStorage.clear();
-                    window.location.href = 'index-moderno.html';
+                    window.location.href = '../index.html';
                 });
             }
         };
