@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TomaSalud - Dashboard Funcional</title>
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <style>
+        /* Estilos adicionales para medicamentos */
+        .medication-item {
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            background: white !important;
+        }
+        .medication-item:hover {
+            border-color: #007bff !important;
+            background: #f8f9fa !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.15) !important;
+        }
+        .medication-item.selected {
+            border-color: #007bff !important;
+            background: #007bff !important;
+            color: white !important;
+            box-shadow: 0 6px 20px rgba(0,123,255,0.3) !important;
+        }
+        .medication-item.selected:hover {
+            background: #0056b3 !important;
+        }
+        
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: #0f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 11px;
+            max-width: 300px;
+            z-index: 9999;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-info" id="debug-info">
+        <div>🔧 TomaSalud Debug</div>
+        <div id="status">Inicializando...</div>
+        <div>Usuario: <span id="user-info">-</span></div>
+        <div>Medicamentos: <span id="med-count">0</span></div>
+    </div>
+
+    <div class="container">
+        <header class="dashboard-header">
+            <h1>🏥 TomaSalud Dashboard</h1>
+            <div class="user-info">
+                <span id="welcome-user">Bienvenido, Usuario</span>
+                <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <!-- Sección de Medicamentos -->
+            <section class="medications-section">
+                <h2>💊 Mis Medicamentos</h2>
+                <div class="success-message" id="success-msg" style="display: none;">
+                    ✅ ¡Medicamentos cargados correctamente! Haz clic en cualquier medicamento para seleccionarlo.
+                </div>
+                <div class="medication-list" id="medication-list">
+                    <div class="loading">⏳ Cargando medicamentos...</div>
+                </div>
+                <button onclick="addNewMedication()" class="add-btn" style="margin-top: 15px;">
+                    ➕ Agregar Nuevo Medicamento
+                </button>
+            </section>
+
+            <!-- Sección de Alarmas -->
+            <section class="alarms-section">
+                <h2>⏰ Próximas Alarmas</h2>
+                <div class="alarms-list" id="alarms-list">
+                    <div class="loading">⏳ Cargando alarmas...</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script>
+        const BASE_URL = 'http://127.0.0.1:8000';
+        let currentUserId = null;
+        let selectedMedication = null;
+        
+        // Función para mostrar debug
+        function updateDebug(message) {
+            document.getElementById('status').textContent = message;
+            console.log('🔧 Debug:', message);
+        }
+
+        // Auto-login al cargar la página
+        async function autoLogin() {
+            updateDebug('Haciendo login automático...');
+            
+            try {
+                const response = await fetch(`${BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'freligio008@gmail.com',
+                        password: '123456'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Guardar datos de sesión
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('user_id', data.user_id);
+                    localStorage.setItem('user_data', JSON.stringify({
+                        user_id: data.user_id,
+                        nombre: data.nombre,
+                        token: data.access_token
+                    }));
+                    
+                    currentUserId = data.user_id;
+                    document.getElementById('user-info').textContent = data.nombre;
+                    document.getElementById('welcome-user').textContent = `Bienvenido, ${data.nombre}`;
+                    
+                    updateDebug('✅ Login exitoso');
+                    
+                    // Cargar medicamentos automáticamente
+                    await loadMedications();
+                    
+                } else {
+                    throw new Error(`Login falló: ${response.status}`);
+                }
+            } catch (error) {
+                updateDebug('❌ Error en login: ' + error.message);
+                console.error('Error login:', error);
+            }
+        }
+
+        // Cargar medicamentos
+        async function loadMedications() {
+            if (!currentUserId) {
+                updateDebug('⚠️ No hay usuario');
+                return;
+            }
+            
+            updateDebug('Cargando medicamentos...');
+            
+            try {
+                const response = await fetch(`${BASE_URL}/medicamentos/?usuario_id=${currentUserId}`);
+                if (response.ok) {
+                    const medicamentos = await response.json();
+                    
+                    document.getElementById('med-count').textContent = medicamentos.length;
+                    
+                    const listElement = document.getElementById('medication-list');
+                    
+                    if (medicamentos.length > 0) {
+                        listElement.innerHTML = '';
+                        
+                        medicamentos.forEach((med, index) => {
+                            const div = document.createElement('div');
+                            div.className = 'medication-item';
+                            div.setAttribute('data-med-id', med.ID_MEDICAMENTO);
+                            
+                            div.innerHTML = `
+                                <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">
+                                    💊 ${med.NOMBRE}
+                                </div>
+                                <div style="color: #666; margin-bottom: 3px;">
+                                    <strong>Dosis:</strong> ${med.DOSIS}
+                                </div>
+                                <div style="color: #666; margin-bottom: 3px;">
+                                    <strong>Hora:</strong> ${med.HORA}
+                                </div>
+                                <div style="color: #666; font-size: 12px;">
+                                    ${med.OBSERVACION || 'Sin observaciones'}
+                                </div>
+                            `;
+                            
+                            // Evento de clic
+                            div.addEventListener('click', function() {
+                                // Quitar selección de otros
+                                document.querySelectorAll('.medication-item').forEach(item => {
+                                    item.classList.remove('selected');
+                                });
+                                
+                                // Seleccionar este
+                                this.classList.add('selected');
+                                selectedMedication = med;
+                                
+                                updateDebug(`✅ Medicamento seleccionado: ${med.NOMBRE}`);
+                                console.log('Medicamento seleccionado:', med);
+                            });
+                            
+                            listElement.appendChild(div);
+                        });
+                        
+                        // Mostrar mensaje de éxito
+                        document.getElementById('success-msg').style.display = 'block';
+                        updateDebug(`✅ ${medicamentos.length} medicamentos cargados`);
+                        
+                    } else {
+                        listElement.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No hay medicamentos registrados</div>';
+                        updateDebug('⚠️ No hay medicamentos');
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateDebug('❌ Error cargando: ' + error.message);
+                document.getElementById('medication-list').innerHTML = `<div style="color: red; padding: 20px;">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Función para agregar medicamento
+        function addNewMedication() {
+            if (selectedMedication) {
+                alert(`Has seleccionado: ${selectedMedication.NOMBRE}\n\nAquí puedes agregar la lógica para crear una nueva alarma o editar el medicamento.`);
+            } else {
+                alert('Selecciona un medicamento primero haciendo clic en él, o implementa la lógica para crear un medicamento completamente nuevo.');
+            }
+        }
+
+        // Función de logout
+        function logout() {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        // Cargar alarmas (simulado)
+        function loadAlarms() {
+            const alarmsElement = document.getElementById('alarms-list');
+            alarmsElement.innerHTML = `
+                <div style="padding: 15px; border: 1px solid #ddd; border-radius: 5px; margin: 5px 0;">
+                    <strong>⏰ Paracetamol</strong><br>
+                    <small>Próxima dosis: Hoy 14:00</small>
+                </div>
+                <div style="padding: 15px; border: 1px solid #ddd; border-radius: 5px; margin: 5px 0;">
+                    <strong>⏰ Ibuprofeno</strong><br>
+                    <small>Próxima dosis: Hoy 18:00</small>
+                </div>
+            `;
+        }
+
+        // Inicializar cuando la página carga
+        window.addEventListener('load', async function() {
+            updateDebug('Iniciando aplicación...');
+            await autoLogin();
+            loadAlarms();
+        });
+    </script>
+</body>
+</html>

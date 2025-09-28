@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TomaSalud - Panel de Control</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <style>
+        /* Estilos para modales */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-hidden {
+            display: none !important;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 30px;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h2 {
+            color: #333;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: -20px;
+            margin-right: -10px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .register-button {
+            width: 100%;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .register-button:hover {
+            background: linear-gradient(135deg, #0056b3, #004494);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <main class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="logo-area">
+                <img src="assets/images/logo.png" alt="Logo de TomaSalud" class="logo-image">
+                <span class="logo-text">TomaSalud</span>
+            </div>
+            <div class="user-profile">
+                <span class="username" id="username-display">Usuario</span>
+                <img src="assets/images/usuario.png" alt="Icono de usuario" class="user-icon">
+            </div>
+        </header>
+
+        <!-- Creación de los paneles -->
+        <section class="dashboard-content">
+            <!-- Panel de Tratamientos -->
+            <div class="treatments-panel">
+                <div class="treatments-panel-header">
+                    <h3 class="panel-title">Tratamientos</h3>
+                    <div class="treatments-header-buttons">
+                        <!-- botones de accion tratamientos -->
+                        <button class="action-button edit-button-treatments">Editar</button>
+                        <button class="action-button delete-button-treatments">Eliminar</button>
+                    </div>
+                </div>
+                <!-- ✅ AGREGADO: Lista de tratamientos -->
+                <ul class="treatment-list" id="treatment-list">
+                    <!-- Se llenará dinámicamente -->
+                </ul>
+                <!-- ✅ AGREGADO: Footer del panel -->
+                <div class="panel-footer">
+                    <button class="add-button" id="add-treatment-button">+ Nuevo Tratamiento</button>
+                </div>
+            </div>
+
+            <!-- ✅ CORREGIDO: Panel de medicamentos con estructura completa -->
+            <div class="medications-panel">
+                <div class="medications-panel-header">
+                    <h3 class="panel-title">Medicamentos</h3>
+                    <div class="medications-header-buttons">
+                        <button class="action-button edit-button-medications">Editar</button>
+                        <button class="action-button delete-button-medications">Eliminar</button>
+                        <button class="action-button" onclick="debugMedicamentos()" style="background: #ff9800;">🔧 Debug</button>
+                    </div>
+                </div>
+                <!-- ✅ AGREGADO: Lista de medicamentos -->
+                <ul class="medication-list" id="medication-list">
+                    <li class="text-center-muted">Selecciona un tratamiento para ver sus medicamentos</li>
+                </ul>
+                <!-- ✅ AGREGADO: Footer del panel -->
+                <div class="panel-footer">
+                    <button class="add-button" id="add-medication-button">+ Nuevo Medicamento</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ✅ CORREGIDO: Footer con estructura correcta -->
+        <footer class="dashboard-footer">
+            <button class="action-button" id="alarmas-button">🔔 Ver Alarmas</button>
+            <button class="action-button" id="export-pdf-button">📄 Exportar PDF</button>
+            <button class="action-button" id="logout-button">🚪 Salir</button>
+        </footer>
+    </main>
+
+    <!-- ✅ AGREGADO: Modales para formularios -->
+    <!-- Modal para nuevo tratamiento -->
+    <div id="treatment-modal" class="modal modal-hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Nuevo Tratamiento</h2>
+            <form id="treatment-form">
+                <div class="input-group">
+                    <label for="treatment-name">Nombre del tratamiento *</label>
+                    <input type="text" id="treatment-name" name="nombre_tratamiento" required>
+                </div>
+                <div class="input-group">
+                    <label for="treatment-start">Fecha de inicio *</label>
+                    <input type="date" id="treatment-start" name="fecha_inicio" required>
+                </div>
+                <div class="input-group">
+                    <label for="treatment-end">Fecha de fin</label>
+                    <input type="date" id="treatment-end" name="fecha_fin">
+                </div>
+                <button type="submit" class="register-button">Crear Tratamiento</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para nuevo medicamento -->
+    <div id="medication-modal" class="modal modal-hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Nuevo Medicamento</h2>
+            <form id="medication-form">
+                <div class="input-group">
+                    <label for="medication-treatment">Tratamiento *</label>
+                    <select id="medication-treatment" name="tratamiento_id" required>
+                        <option value="">Seleccionar tratamiento</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="medication-name">Nombre del medicamento *</label>
+                    <input type="text" id="medication-name" name="nombre" required>
+                </div>
+                <div class="input-group">
+                    <label for="medication-dose">Dosis *</label>
+                    <input type="text" id="medication-dose" name="dosis" placeholder="ej: 500mg" required>
+                </div>
+                <div class="input-group">
+                    <label for="medication-time">Hora *</label>
+                    <input type="time" id="medication-time" name="hora" required>
+                </div>
+                <div class="input-group">
+                    <label for="medication-interval">Intervalo (horas) *</label>
+                    <input type="number" id="medication-interval" name="intervalo" min="1" max="24" required>
+                </div>
+                <div class="input-group">
+                    <label for="medication-notes">Observaciones</label>
+                    <textarea id="medication-notes" name="observacion" rows="3"></textarea>
+                </div>
+                <button type="submit" class="register-button">Agregar Medicamento</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Enlace al archivo JavaScript -->
+    <script src="assets/js/config.js"></script>
+    <script>
+        // Dashboard mejorado - JavaScript integrado
+        const BASE_URL = 'http://127.0.0.1:8000';
+        let currentUserId = null;
+        let currentToken = null;
+        let tratamientoSeleccionado = null;
+        let medicamentoSeleccionado = null;
+
+        // Auto-login al cargar
+        async function autoLogin() {
+            console.log('🔑 Iniciando login automático...');
+            
+            try {
+                const response = await fetch(`${BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'freligio008@gmail.com',
+                        password: '123456'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUserId = data.user_id;
+                    currentToken = data.access_token;
+                    
+                    // Guardar en localStorage
+                    localStorage.setItem('token', currentToken);
+                    localStorage.setItem('user_id', currentUserId);
+                    localStorage.setItem('user_data', JSON.stringify(data));
+                    
+                    // Actualizar interfaz
+                    document.getElementById('username-display').textContent = data.nombre;
+                    
+                    console.log('✅ Login exitoso, usuario:', data.nombre);
+                    
+                    // Cargar datos
+                    await cargarTratamientos();
+                    await cargarMedicamentos();
+                    
+                } else {
+                    throw new Error(`Login falló: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('❌ Error en login:', error);
+                alert('Error en el login. Verifica que el servidor esté corriendo.');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Cargar tratamientos
+        async function cargarTratamientos() {
+            if (!currentUserId) return;
+            
+            console.log('📋 Cargando tratamientos...');
+            
+            try {
+                const response = await fetch(`${BASE_URL}/tratamientos/?usuario_id=${currentUserId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const tratamientos = await response.json();
+                    console.log('📋 Tratamientos recibidos:', tratamientos);
+                    
+                    const listElement = document.getElementById('treatment-list');
+                    
+                    if (tratamientos.length > 0) {
+                        listElement.innerHTML = '';
+                        
+                        tratamientos.forEach((tratamiento, index) => {
+                            const li = document.createElement('li');
+                            li.className = 'treatment-item';
+                            li.innerHTML = `
+                                <div class="treatment-info">
+                                    <strong>${tratamiento.NOMBRE_TRATAMIENTO}</strong>
+                                    <div class="treatment-details">
+                                        <span>Inicio: ${tratamiento.FECHA_INICIO}</span>
+                                        <span>Estado: ${tratamiento.ESTADO}</span>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            li.addEventListener('click', () => {
+                                document.querySelectorAll('.treatment-item').forEach(item => {
+                                    item.classList.remove('selected');
+                                });
+                                li.classList.add('selected');
+                                tratamientoSeleccionado = tratamiento;
+                                console.log('🎯 Tratamiento seleccionado:', tratamiento);
+                                cargarMedicamentosDelTratamiento(tratamiento.ID_TRATAMIENTO);
+                            });
+                            
+                            listElement.appendChild(li);
+                        });
+                    } else {
+                        listElement.innerHTML = '<li class="no-data">No hay tratamientos registrados</li>';
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.error('❌ Error cargando tratamientos:', error);
+                document.getElementById('treatment-list').innerHTML = '<li class="error">Error cargando tratamientos</li>';
+            }
+        }
+
+        // Cargar medicamentos generales
+        async function cargarMedicamentos() {
+            if (!currentUserId) return;
+            
+            console.log('💊 Cargando medicamentos...');
+            
+            try {
+                const response = await fetch(`${BASE_URL}/medicamentos/?usuario_id=${currentUserId}`);
+                if (response.ok) {
+                    const medicamentos = await response.json();
+                    console.log('💊 Medicamentos recibidos:', medicamentos);
+                    mostrarMedicamentos(medicamentos);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.error('❌ Error cargando medicamentos:', error);
+                document.getElementById('medication-list').innerHTML = '<li class="error">Error cargando medicamentos</li>';
+            }
+        }
+
+        // Cargar medicamentos de un tratamiento específico
+        async function cargarMedicamentosDelTratamiento(treatmentId) {
+            console.log('💊 Cargando medicamentos del tratamiento:', treatmentId);
+            
+            try {
+                const response = await fetch(`${BASE_URL}/medicamentos/tratamiento/${treatmentId}`);
+                if (response.ok) {
+                    const medicamentos = await response.json();
+                    console.log('💊 Medicamentos del tratamiento recibidos:', medicamentos);
+                    mostrarMedicamentos(medicamentos);
+                } else {
+                    // Si no encuentra endpoint específico, usar el general y filtrar
+                    await cargarMedicamentos();
+                }
+            } catch (error) {
+                console.error('❌ Error cargando medicamentos del tratamiento:', error);
+                await cargarMedicamentos();
+            }
+        }
+
+        // Mostrar medicamentos en la interfaz
+        function mostrarMedicamentos(medicamentos) {
+            const listElement = document.getElementById('medication-list');
+            
+            if (medicamentos && medicamentos.length > 0) {
+                listElement.innerHTML = '';
+                
+                medicamentos.forEach((medicamento, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'medication-item';
+                    li.style.cssText = `
+                        padding: 15px;
+                        margin: 10px 0;
+                        border: 2px solid #ddd;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        background: white;
+                    `;
+                    
+                    li.innerHTML = `
+                        <div class="medication-info">
+                            <strong style="font-size: 16px; color: #333;">💊 ${medicamento.NOMBRE}</strong>
+                            <div class="medication-details" style="margin-top: 8px; color: #666;">
+                                <div>📋 Dosis: ${medicamento.DOSIS}</div>
+                                <div>⏰ Hora: ${medicamento.HORA}</div>
+                                ${medicamento.OBSERVACION ? `<div>📝 Notas: ${medicamento.OBSERVACION}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Eventos de hover y click
+                    li.addEventListener('mouseenter', () => {
+                        li.style.borderColor = '#007bff';
+                        li.style.background = '#f8f9fa';
+                        li.style.transform = 'translateY(-2px)';
+                        li.style.boxShadow = '0 4px 12px rgba(0,123,255,0.15)';
+                    });
+                    
+                    li.addEventListener('mouseleave', () => {
+                        if (!li.classList.contains('selected')) {
+                            li.style.borderColor = '#ddd';
+                            li.style.background = 'white';
+                            li.style.transform = 'translateY(0)';
+                            li.style.boxShadow = 'none';
+                        }
+                    });
+                    
+                    li.addEventListener('click', () => {
+                        // Limpiar selecciones anteriores
+                        document.querySelectorAll('.medication-item').forEach(item => {
+                            item.classList.remove('selected');
+                            item.style.borderColor = '#ddd';
+                            item.style.background = 'white';
+                            item.style.color = 'inherit';
+                        });
+                        
+                        // Seleccionar este medicamento
+                        li.classList.add('selected');
+                        li.style.borderColor = '#007bff';
+                        li.style.background = '#007bff';
+                        li.style.color = 'white';
+                        li.style.boxShadow = '0 6px 20px rgba(0,123,255,0.3)';
+                        
+                        medicamentoSeleccionado = medicamento;
+                        console.log('✅ Medicamento seleccionado:', medicamento);
+                        alert(`Medicamento seleccionado: ${medicamento.NOMBRE}\nDosis: ${medicamento.DOSIS}\nHora: ${medicamento.HORA}`);
+                    });
+                    
+                    listElement.appendChild(li);
+                });
+            } else {
+                listElement.innerHTML = '<li class="no-data" style="text-align: center; color: #666; padding: 20px;">No hay medicamentos registrados</li>';
+            }
+        }
+
+        // Función de debug para medicamentos
+        function debugMedicamentos() {
+            console.log('🔧 Debug de medicamentos');
+            console.log('Usuario actual:', currentUserId);
+            console.log('Token:', currentToken ? 'Disponible' : 'No disponible');
+            console.log('Tratamiento seleccionado:', tratamientoSeleccionado);
+            console.log('Medicamento seleccionado:', medicamentoSeleccionado);
+            
+            if (currentUserId) {
+                cargarMedicamentos();
+            } else {
+                alert('No hay usuario logueado. Reiniciando login...');
+                autoLogin();
+            }
+        }
+
+        // Event listeners para los botones
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Iniciando dashboard...');
+            
+            // Auto login
+            autoLogin();
+            
+            // Botón agregar medicamento - abrir modal
+            const addMedButton = document.getElementById('add-medication-button');
+            if (addMedButton) {
+                addMedButton.addEventListener('click', () => {
+                    openMedicationModal();
+                });
+            }
+            
+            // Botón alarmas
+            const alarmasButton = document.getElementById('alarmas-button');
+            if (alarmasButton) {
+                alarmasButton.addEventListener('click', () => {
+                    window.open('alarmas.html', '_blank');
+                });
+            }
+            
+            // Botón logout
+            const logoutButton = document.getElementById('logout-button');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.href = 'index.html';
+                });
+            }
+        });
+        
+        // Funciones para manejar modales
+        function openMedicationModal() {
+            const modal = document.getElementById('medication-modal');
+            const treatmentSelect = document.getElementById('medication-treatment');
+            
+            // Limpiar el select de tratamientos y cargarlo
+            treatmentSelect.innerHTML = '<option value="">Seleccionar tratamiento</option>';
+            
+            // Cargar tratamientos activos
+            cargarTratamientosEnSelect();
+            
+            // Mostrar modal
+            modal.classList.remove('modal-hidden');
+            modal.style.display = 'block';
+        }
+
+        function closeMedicationModal() {
+            const modal = document.getElementById('medication-modal');
+            modal.classList.add('modal-hidden');
+            modal.style.display = 'none';
+            
+            // Limpiar formulario
+            document.getElementById('medication-form').reset();
+        }
+
+        async function cargarTratamientosEnSelect() {
+            try {
+                const response = await fetch(`${BASE_URL}/tratamientos/usuario/${currentUserId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const tratamientos = await response.json();
+                    const select = document.getElementById('medication-treatment');
+                    
+                    tratamientos.forEach(tratamiento => {
+                        if (tratamiento.ESTADO.toLowerCase() === 'activo') {
+                            const option = document.createElement('option');
+                            option.value = tratamiento.ID_TRATAMIENTO;
+                            option.textContent = tratamiento.NOMBRE_TRATAMIENTO;
+                            select.appendChild(option);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando tratamientos:', error);
+            }
+        }
+
+        // Event listeners para cerrar modales
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cerrar modales con la X
+            document.querySelectorAll('.close').forEach(closeBtn => {
+                closeBtn.addEventListener('click', function() {
+                    const modal = this.closest('.modal');
+                    modal.classList.add('modal-hidden');
+                    modal.style.display = 'none';
+                });
+            });
+
+            // Cerrar modales clicking fuera
+            window.addEventListener('click', function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.classList.add('modal-hidden');
+                    event.target.style.display = 'none';
+                }
+            });
+
+            // Manejar formulario de medicamento
+            const medicationForm = document.getElementById('medication-form');
+            if (medicationForm) {
+                medicationForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    const medicamentoData = {
+                        ID_TRATAMIENTO: parseInt(formData.get('tratamiento_id')),
+                        NOMBRE: formData.get('nombre'),
+                        DOSIS: formData.get('dosis'),
+                        HORA: formData.get('hora'),
+                        INTERVALO: parseInt(formData.get('intervalo')),
+                        OBSERVACION: formData.get('observacion') || null
+                    };
+
+                    try {
+                        const response = await fetch(`${BASE_URL}/medicamentos/`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${currentToken}`
+                            },
+                            body: JSON.stringify(medicamentoData)
+                        });
+
+                        if (response.ok) {
+                            alert('✅ Medicamento agregado exitosamente');
+                            closeMedicationModal();
+                            // Recargar medicamentos si hay un tratamiento seleccionado
+                            if (tratamientoSeleccionado) {
+                                cargarMedicamentos();
+                            }
+                        } else {
+                            const error = await response.json();
+                            alert('❌ Error: ' + (error.detail || 'No se pudo agregar el medicamento'));
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('❌ Error de conexión');
+                    }
+                });
+            }
+        });
+
+        // Agregar función global para debug
+        window.debugMedicamentos = debugMedicamentos;
+    </script>
+</body>
+</html>
