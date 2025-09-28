@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TomaSalud - Gestión de Alarmas</title>
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -611,7 +611,7 @@
             <nav>
                 <ul class="sidebar-nav">
                     <li class="nav-item">
-                        <a href="../dashboard.html" class="nav-link">
+                        <a href="dashboard-moderno.html" class="nav-link">
                             <i class="nav-icon fas fa-home"></i>
                             Dashboard
                         </a>
@@ -989,7 +989,7 @@
                     const token = localStorage.getItem('token');
                     
                     if (!userData || !token) {
-                        window.location.href = '../index.html';
+                        window.location.href = 'index-moderno.html';
                         return;
                     }
                     
@@ -1001,7 +1001,7 @@
                     
                 } catch (error) {
                     console.error('Error initializing app:', error);
-                    window.location.href = '../index.html';
+                    window.location.href = 'index-moderno.html';
                 }
             },
 
