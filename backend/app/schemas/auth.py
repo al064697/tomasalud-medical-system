@@ -15,6 +15,8 @@ class LoginRequiest(BaseModel):
 class Token(BaseModel): 
     access_token: str
     token_type: str = "bearer"
+    user_id: Optional[int] = None
+    nombre: Optional[str] = None
 
 class UsuarioRegister(BaseModel):
     """Schema para registro de nuevos usuarios"""

@@ -44,9 +44,13 @@ def crear_medicamento(
     return db_medicamento
 
 @router.get("/", response_model=List[MedicamentoOut])
-def obtener_medicamentos(db: Session = Depends(get_db)):
-    """Obtener todos los medicamentos"""
-    medicamentos = db.query(Medicamento).all()
+def obtener_medicamentos(usuario_id: int = None, db: Session = Depends(get_db)):
+    """Obtener medicamentos, opcionalmente filtrados por usuario"""
+    if usuario_id:
+        # Filtrar medicamentos por tratamientos del usuario
+        medicamentos = db.query(Medicamento).join(Tratamiento).filter(Tratamiento.ID_USUARIO == usuario_id).all()
+    else:
+        medicamentos = db.query(Medicamento).all()
     return medicamentos
 
 @router.get("/tratamiento/{tratamiento_id}", response_model=List[MedicamentoOut])

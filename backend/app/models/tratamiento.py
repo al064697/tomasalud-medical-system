@@ -18,7 +18,7 @@ class Tratamiento(Base):
     NOMBRE_TRATAMIENTO = Column(String(50), nullable=False)
     FECHA_INICIO = Column(Date, nullable=False)
     FECHA_FIN = Column(Date, nullable=True)
-    ESTADO = Column(Enum('Activo', 'Suspendido', 'Finalizado'), nullable=False)
+    ESTADO = Column(String(20), nullable=False)
     FECHA_CREACION = Column(TIMESTAMP, server_default=func.now())
 
     # Relación con Usuario

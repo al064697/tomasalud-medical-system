@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TomaSalud - Dashboard Moderno</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #41c1ba;
+            --primary-dark: #2d8b87;
+            --primary-light: #7dd3cf;
+            --secondary: #325866;
+            --secondary-dark: #1e3d4a;
+            --background: #f8fafb;
+            --surface: #ffffff;
+            --surface-elevated: #ffffff;
+            --text-primary: #1a202c;
+            --text-secondary: #718096;
+            --text-muted: #a0aec0;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --error: #f56565;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Layout Principal */
+        .app-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            grid-template-rows: auto 1fr;
+            grid-template-areas: 
+                "sidebar header"
+                "sidebar main";
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            grid-area: header;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .user-menu:hover {
+            background: var(--background);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .user-info h4 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .user-info p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            grid-area: sidebar;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 2rem 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .brand-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--primary);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            grid-area: main;
+            padding: 2rem;
+            overflow-y: auto;
+            background: var(--background);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 0;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            padding: 1.5rem 2rem 1rem;
+            border-bottom: 1px solid var(--border-light);
+            background: linear-gradient(135deg, var(--surface) 0%, #fafbfc 100%);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .card-footer {
+            padding: 1rem 2rem 1.5rem;
+            border-top: 1px solid var(--border-light);
+            background: var(--background);
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--background);
+            color: var(--text-primary);
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8125rem;
+        }
+
+        .btn-lg {
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            border-radius: var(--radius-lg);
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Items de Lista */
+        .item-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .item {
+            padding: 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--surface);
+        }
+
+        .item:hover {
+            border-color: var(--primary-light);
+            background: linear-gradient(135deg, var(--surface) 0%, #f0fffe 100%);
+            transform: translateX(4px);
+        }
+
+        .item.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-title {
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .item-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            background: var(--success);
+            color: white;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .item-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .item.selected .item-meta {
+            opacity: 1;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        /* Estado Vacío */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h4 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state p {
+            font-size: 0.875rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            max-width: 500px;
+            margin: 2rem auto;
+            animation: modalSlideUp 0.3s ease-out;
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1.375rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--background);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        /* Formularios */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.9375rem;
+            transition: all 0.2s ease;
+            background: var(--surface);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(65, 193, 186, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Alertas */
+        .alert {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            z-index: 1100;
+            animation: alertSlideIn 0.3s ease-out;
+            max-width: 400px;
+        }
+
+        @keyframes alertSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .alert-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .alert-error {
+            background: var(--error);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                grid-template-areas: 
+                    "header"
+                    "main";
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .modal {
+                padding: 1rem;
+            }
+        }
+
+        /* Animaciones suaves */
+        * {
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        /* Loading states */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">T</div>
+                <span class="brand-text">TomaSalud</span>
+            </div>
+            <nav>
+                <ul class="sidebar-nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active">
+                            <i class="nav-icon fas fa-home"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="dashboard-moderno.html" class="nav-link" id="treatments-nav">
+                            <i class="nav-icon fas fa-clipboard-list"></i>
+                            Tratamientos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="dashboard-moderno.html" class="nav-link" id="medications-nav">
+                            <i class="nav-icon fas fa-pills"></i>
+                            Medicamentos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="alarmas-moderno.html" class="nav-link" id="alarms-nav">
+                            <i class="nav-icon fas fa-bell"></i>
+                            Alarmas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="configuracion-moderno.html" class="nav-link" id="settings-nav">
+                            <i class="nav-icon fas fa-cog"></i>
+                            Configuración
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Header -->
+        <header class="header">
+            <h1 class="header-title">Panel de Control</h1>
+            <div class="header-actions">
+                <div class="user-menu">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <div class="user-info">
+                        <h4 id="user-name">Cargando...</h4>
+                        <p>Paciente</p>
+                    </div>
+                    <button class="btn btn-ghost btn-sm" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="cards-grid">
+                <!-- Card de Tratamientos -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3><i class="fas fa-clipboard-list"></i> Tratamientos</h3>
+                            <div class="card-actions">
+                                <button class="btn btn-ghost btn-sm" id="edit-treatment-btn" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-ghost btn-sm" id="delete-treatment-btn" title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="card-subtitle">Gestiona tus planes de tratamiento</p>
+                    </div>
+                    <div class="card-body">
+                        <ul class="item-list" id="treatments-list">
+                            <li class="empty-state pulse">
+                                <i class="fas fa-clipboard-list"></i>
+                                <h4>Cargando tratamientos...</h4>
+                                <p>Por favor espera un momento</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary btn-full" id="add-treatment-btn">
+                            <i class="fas fa-plus"></i>
+                            Nuevo Tratamiento
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card de Medicamentos -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3><i class="fas fa-pills"></i> Medicamentos</h3>
+                            <div class="card-actions">
+                                <button class="btn btn-ghost btn-sm" id="edit-medication-btn" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-ghost btn-sm" id="delete-medication-btn" title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="card-subtitle">Medicamentos del tratamiento seleccionado</p>
+                    </div>
+                    <div class="card-body">
+                        <ul class="item-list" id="medications-list">
+                            <li class="empty-state">
+                                <i class="fas fa-pills"></i>
+                                <h4>Selecciona un tratamiento</h4>
+                                <p>Elige un tratamiento para ver sus medicamentos</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary btn-full" id="add-medication-btn">
+                            <i class="fas fa-plus"></i>
+                            Nuevo Medicamento
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Tratamiento -->
+    <div class="modal" id="treatment-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    Nuevo Tratamiento
+                </h3>
+                <button class="modal-close" type="button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="treatment-form">
+                    <div class="form-group">
+                        <label class="form-label" for="treatment-name">
+                            Nombre del Tratamiento *
+                        </label>
+                        <input 
+                            type="text" 
+                            id="treatment-name" 
+                            name="nombre" 
+                            class="form-input" 
+                            placeholder="Ej: Tratamiento para dolor de cabeza"
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="treatment-description">
+                            Descripción
+                        </label>
+                        <textarea 
+                            id="treatment-description" 
+                            name="descripcion" 
+                            class="form-textarea"
+                            placeholder="Descripción detallada del tratamiento..."
+                            rows="3"
+                        ></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-full">
+                        <i class="fas fa-save"></i>
+                        Guardar Tratamiento
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Medicamento -->
+    <div class="modal" id="medication-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-pills"></i>
+                    Nuevo Medicamento
+                </h3>
+                <button class="modal-close" type="button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="medication-form">
+                    <div class="form-group">
+                        <label class="form-label" for="medication-treatment">
+                            Tratamiento *
+                        </label>
+                        <select id="medication-treatment" name="tratamiento_id" class="form-select" required>
+                            <option value="">Seleccionar tratamiento</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="medication-name">
+                            Nombre del Medicamento *
+                        </label>
+                        <input 
+                            type="text" 
+                            id="medication-name" 
+                            name="nombre" 
+                            class="form-input" 
+                            placeholder="Ej: Paracetamol"
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="medication-dose">
+                            Dosis *
+                        </label>
+                        <input 
+                            type="text" 
+                            id="medication-dose" 
+                            name="dosis" 
+                            class="form-input" 
+                            placeholder="Ej: 500mg"
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="medication-time">
+                            Hora de Toma *
+                        </label>
+                        <input 
+                            type="time" 
+                            id="medication-time" 
+                            name="hora" 
+                            class="form-input"
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="medication-interval">
+                            Intervalo (horas) *
+                        </label>
+                        <input 
+                            type="number" 
+                            id="medication-interval" 
+                            name="intervalo" 
+                            class="form-input" 
+                            min="1" 
+                            max="24" 
+                            placeholder="8"
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="medication-notes">
+                            Observaciones
+                        </label>
+                        <textarea 
+                            id="medication-notes" 
+                            name="observacion" 
+                            class="form-textarea"
+                            placeholder="Instrucciones especiales, efectos secundarios, etc."
+                            rows="3"
+                        ></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-full">
+                        <i class="fas fa-save"></i>
+                        Guardar Medicamento
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración
+        const CONFIG = {
+            API_URL: 'http://127.0.0.1:8000'
+        };
+
+        // Estado de la aplicación
+        const AppState = {
+            user: null,
+            token: null,
+            treatments: [],
+            medications: [],
+            selectedTreatment: null,
+            selectedMedication: null,
+            loading: false
+        };
+
+        // Utilidades
+        const Utils = {
+            async request(endpoint, options = {}) {
+                const url = `${CONFIG.API_URL}${endpoint}`;
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(AppState.token && { Authorization: `Bearer ${AppState.token}` })
+                    },
+                    ...options
+                };
+
+                try {
+                    const response = await fetch(url, config);
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.detail || `HTTP ${response.status}`);
+                    }
+                    
+                    return data;
+                } catch (error) {
+                    console.error(`Request failed: ${endpoint}`, error);
+                    throw error;
+                }
+            },
+
+            showAlert(message, type = 'success') {
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type}`;
+                alert.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    ${message}
+                `;
+                
+                document.body.appendChild(alert);
+                
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 300);
+                }, 3000);
+            },
+
+            setLoading(element, loading = true) {
+                if (loading) {
+                    element.classList.add('loading');
+                } else {
+                    element.classList.remove('loading');
+                }
+            },
+
+            formatTime(time) {
+                return new Date(`2000-01-01T${time}`).toLocaleTimeString('es-ES', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+        };
+
+        // Servicios de API
+        const API = {
+            async loadUserFromStorage() {
+                const userData = localStorage.getItem('user');
+                const token = localStorage.getItem('token');
+                
+                if (!userData || !token) {
+                    throw new Error('No user data found');
+                }
+                
+                AppState.user = JSON.parse(userData);
+                AppState.token = token;
+                
+                return AppState.user;
+            },
+
+            async getTreatments() {
+                return await Utils.request(`/tratamientos/?usuario_id=${AppState.user.user_id}`);
+            },
+
+            async getMedications() {
+                return await Utils.request(`/medicamentos/?usuario_id=${AppState.user.user_id}`);
+            },
+
+            async createTreatment(data) {
+                return await Utils.request('/tratamientos/', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        ...data,
+                        FECHA_INICIO: new Date().toISOString().split('T')[0],
+                        ESTADO: 'ACTIVO',
+                        ID_USUARIO: AppState.user.user_id
+                    })
+                });
+            },
+
+            async createMedication(data) {
+                return await Utils.request('/medicamentos/', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+            },
+
+            async updateTreatment(id, data) {
+                return await Utils.request(`/tratamientos/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+            },
+
+            async deleteTreatment(id) {
+                return await Utils.request(`/tratamientos/${id}`, {
+                    method: 'DELETE'
+                });
+            },
+
+            async updateMedication(id, data) {
+                return await Utils.request(`/medicamentos/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+            },
+
+            async deleteMedication(id) {
+                return await Utils.request(`/medicamentos/${id}`, {
+                    method: 'DELETE'
+                });
+            }
+        };
+
+        // Componentes UI
+        const UI = {
+            updateUserInfo() {
+                if (!AppState.user) return;
+                
+                const userName = document.getElementById('user-name');
+                const userAvatar = document.getElementById('user-avatar');
+                
+                userName.textContent = AppState.user.nombre;
+                userAvatar.textContent = AppState.user.nombre.charAt(0).toUpperCase();
+            },
+
+            renderTreatments() {
+                const container = document.getElementById('treatments-list');
+                
+                if (AppState.treatments.length === 0) {
+                    container.innerHTML = `
+                        <li class="empty-state">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h4>No hay tratamientos</h4>
+                            <p>Crea tu primer tratamiento para comenzar</p>
+                        </li>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = AppState.treatments.map(treatment => `
+                    <li class="item" data-id="${treatment.ID_TRATAMIENTO}">
+                        <div class="item-header">
+                            <div class="item-title">
+                                <i class="fas fa-clipboard-list"></i>
+                                ${treatment.NOMBRE_TRATAMIENTO}
+                            </div>
+                            <span class="item-badge">${treatment.ESTADO}</span>
+                        </div>
+                        <div class="item-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-calendar"></i>
+                                ${treatment.FECHA_INICIO}
+                            </div>
+                            ${treatment.FECHA_FIN ? `
+                                <div class="meta-item">
+                                    <i class="fas fa-calendar-check"></i>
+                                    ${treatment.FECHA_FIN}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </li>
+                `).join('');
+
+                // Agregar event listeners
+                container.querySelectorAll('.item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const id = parseInt(item.dataset.id);
+                        this.selectTreatment(id);
+                    });
+                });
+            },
+
+            renderMedications() {
+                const container = document.getElementById('medications-list');
+                
+                if (!AppState.selectedTreatment) {
+                    container.innerHTML = `
+                        <li class="empty-state">
+                            <i class="fas fa-pills"></i>
+                            <h4>Selecciona un tratamiento</h4>
+                            <p>Elige un tratamiento para ver sus medicamentos</p>
+                        </li>
+                    `;
+                    return;
+                }
+
+                const treatmentMeds = AppState.medications.filter(
+                    med => med.ID_TRATAMIENTO === AppState.selectedTreatment.ID_TRATAMIENTO
+                );
+
+                if (treatmentMeds.length === 0) {
+                    container.innerHTML = `
+                        <li class="empty-state">
+                            <i class="fas fa-pills"></i>
+                            <h4>Sin medicamentos</h4>
+                            <p>Este tratamiento no tiene medicamentos asignados</p>
+                        </li>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = treatmentMeds.map(med => `
+                    <li class="item" data-id="${med.ID_MEDICAMENTO}">
+                        <div class="item-header">
+                            <div class="item-title">
+                                <i class="fas fa-pills"></i>
+                                ${med.NOMBRE}
+                            </div>
+                            <span class="item-badge">${med.DOSIS}</span>
+                        </div>
+                        <div class="item-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                ${Utils.formatTime(med.HORA)}
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-redo"></i>
+                                Cada ${med.INTERVALO}h
+                            </div>
+                            ${med.OBSERVACION ? `
+                                <div class="meta-item">
+                                    <i class="fas fa-sticky-note"></i>
+                                    ${med.OBSERVACION}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </li>
+                `).join('');
+
+                // Agregar event listeners
+                container.querySelectorAll('.item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const id = parseInt(item.dataset.id);
+                        this.selectMedication(id);
+                    });
+                });
+            },
+
+            selectTreatment(id) {
+                // Remover selección anterior
+                document.querySelectorAll('#treatments-list .item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+
+                // Seleccionar nuevo tratamiento
+                const selectedElement = document.querySelector(`#treatments-list .item[data-id="${id}"]`);
+                if (selectedElement) {
+                    selectedElement.classList.add('selected');
+                }
+
+                AppState.selectedTreatment = AppState.treatments.find(t => t.ID_TRATAMIENTO === id);
+                AppState.selectedMedication = null;
+                
+                this.renderMedications();
+            },
+
+            selectMedication(id) {
+                // Remover selección anterior
+                document.querySelectorAll('#medications-list .item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+
+                // Seleccionar nuevo medicamento
+                const selectedElement = document.querySelector(`#medications-list .item[data-id="${id}"]`);
+                if (selectedElement) {
+                    selectedElement.classList.add('selected');
+                }
+
+                AppState.selectedMedication = AppState.medications.find(m => m.ID_MEDICAMENTO === id);
+            },
+
+            showModal(modalId) {
+                document.getElementById(modalId).style.display = 'block';
+            },
+
+            hideModal(modalId) {
+                document.getElementById(modalId).style.display = 'none';
+                // Limpiar formulario
+                const form = document.querySelector(`#${modalId} form`);
+                if (form) form.reset();
+            },
+
+            async loadTreatmentSelect() {
+                const select = document.getElementById('medication-treatment');
+                select.innerHTML = '<option value="">Seleccionar tratamiento</option>';
+                
+                AppState.treatments
+                    .filter(t => t.ESTADO.toLowerCase() === 'activo')
+                    .forEach(treatment => {
+                        const option = document.createElement('option');
+                        option.value = treatment.ID_TRATAMIENTO;
+                        option.textContent = treatment.NOMBRE_TRATAMIENTO;
+                        select.appendChild(option);
+                    });
+            }
+        };
+
+        // Controlador principal
+        const App = {
+            async init() {
+                try {
+                    // Cargar usuario desde localStorage
+                    await API.loadUserFromStorage();
+                    UI.updateUserInfo();
+                    
+                    // Cargar datos
+                    await this.loadData();
+                    
+                    // Configurar event listeners
+                    this.setupEventListeners();
+                    
+                    Utils.showAlert('¡Bienvenido a TomaSalud!');
+                } catch (error) {
+                    console.error('Error initializing app:', error);
+                    Utils.showAlert('Error al inicializar la aplicación', 'error');
+                    // Redireccionar al login
+                    window.location.href = 'index-moderno.html';
+                }
+            },
+
+            async loadData() {
+                try {
+                    Utils.setLoading(document.querySelector('.main-content'), true);
+                    
+                    const [treatments, medications] = await Promise.all([
+                        API.getTreatments(),
+                        API.getMedications()
+                    ]);
+                    
+                    AppState.treatments = treatments || [];
+                    AppState.medications = medications || [];
+                    
+                    UI.renderTreatments();
+                    UI.renderMedications();
+                } catch (error) {
+                    console.error('Error loading data:', error);
+                    Utils.showAlert('Error al cargar los datos', 'error');
+                } finally {
+                    Utils.setLoading(document.querySelector('.main-content'), false);
+                }
+            },
+
+            setupEventListeners() {
+                // Botones principales
+                document.getElementById('add-treatment-btn').addEventListener('click', () => {
+                    UI.showModal('treatment-modal');
+                });
+
+                document.getElementById('add-medication-btn').addEventListener('click', async () => {
+                    await UI.loadTreatmentSelect();
+                    UI.showModal('medication-modal');
+                });
+
+                document.getElementById('logout-btn').addEventListener('click', () => {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.href = 'index-moderno.html';
+                });
+
+                // Botones de CRUD
+                document.getElementById('edit-treatment-btn').addEventListener('click', () => {
+                    if (AppState.selectedTreatment) {
+                        const form = document.getElementById('treatment-form');
+                        form.elements.nombre.value = AppState.selectedTreatment.NOMBRE_TRATAMIENTO;
+                        form.elements.descripcion.value = AppState.selectedTreatment.DESCRIPCION || '';
+                        form.dataset.editId = AppState.selectedTreatment.ID_TRATAMIENTO;
+                        UI.showModal('treatment-modal');
+                    } else {
+                        Utils.showAlert('Selecciona un tratamiento para editar', 'error');
+                    }
+                });
+
+                document.getElementById('delete-treatment-btn').addEventListener('click', async () => {
+                    if (AppState.selectedTreatment) {
+                        if (confirm(`¿Estás seguro de eliminar "${AppState.selectedTreatment.NOMBRE_TRATAMIENTO}"?`)) {
+                            try {
+                                await API.deleteTreatment(AppState.selectedTreatment.ID_TRATAMIENTO);
+                                await this.loadData();
+                                Utils.showAlert('Tratamiento eliminado correctamente');
+                            } catch (error) {
+                                Utils.showAlert('Error al eliminar el tratamiento', 'error');
+                            }
+                        }
+                    } else {
+                        Utils.showAlert('Selecciona un tratamiento para eliminar', 'error');
+                    }
+                });
+
+                document.getElementById('edit-medication-btn').addEventListener('click', () => {
+                    if (AppState.selectedMedication) {
+                        const form = document.getElementById('medication-form');
+                        form.elements.nombre.value = AppState.selectedMedication.NOMBRE;
+                        form.elements.dosis.value = AppState.selectedMedication.DOSIS;
+                        form.elements.hora.value = AppState.selectedMedication.HORA;
+                        form.elements.intervalo.value = AppState.selectedMedication.INTERVALO;
+                        form.elements.observacion.value = AppState.selectedMedication.OBSERVACION || '';
+                        form.dataset.editId = AppState.selectedMedication.ID_MEDICAMENTO;
+                        UI.showModal('medication-modal');
+                    } else {
+                        Utils.showAlert('Selecciona un medicamento para editar', 'error');
+                    }
+                });
+
+                document.getElementById('delete-medication-btn').addEventListener('click', async () => {
+                    if (AppState.selectedMedication) {
+                        if (confirm(`¿Estás seguro de eliminar "${AppState.selectedMedication.NOMBRE}"?`)) {
+                            try {
+                                await API.deleteMedication(AppState.selectedMedication.ID_MEDICAMENTO);
+                                await this.loadData();
+                                Utils.showAlert('Medicamento eliminado correctamente');
+                            } catch (error) {
+                                Utils.showAlert('Error al eliminar el medicamento', 'error');
+                            }
+                        }
+                    } else {
+                        Utils.showAlert('Selecciona un medicamento para eliminar', 'error');
+                    }
+                });
+
+                // Cerrar modales
+                document.querySelectorAll('.modal-close').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const modal = e.target.closest('.modal');
+                        UI.hideModal(modal.id);
+                    });
+                });
+
+                // Cerrar modal al hacer clic fuera
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            UI.hideModal(modal.id);
+                        }
+                    });
+                });
+
+                // Formulario de tratamiento
+                document.getElementById('treatment-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    try {
+                        const formData = new FormData(e.target);
+                        const data = {
+                            NOMBRE_TRATAMIENTO: formData.get('nombre'),
+                            DESCRIPCION: formData.get('descripcion') || null
+                        };
+
+                        const editId = e.target.dataset.editId;
+                        if (editId) {
+                            await API.updateTreatment(editId, data);
+                            Utils.showAlert('Tratamiento actualizado exitosamente');
+                            delete e.target.dataset.editId;
+                        } else {
+                            await API.createTreatment(data);
+                            Utils.showAlert('Tratamiento creado exitosamente');
+                        }
+                        
+                        UI.hideModal('treatment-modal');
+                        e.target.reset();
+                        await this.loadData();
+                    } catch (error) {
+                        Utils.showAlert('Error al procesar el tratamiento', 'error');
+                    }
+                });
+
+                // Formulario de medicamento
+                document.getElementById('medication-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    try {
+                        const formData = new FormData(e.target);
+                        const data = {
+                            ID_TRATAMIENTO: parseInt(formData.get('tratamiento_id')),
+                            NOMBRE: formData.get('nombre'),
+                            DOSIS: formData.get('dosis'),
+                            HORA: formData.get('hora'),
+                            INTERVALO: parseInt(formData.get('intervalo')),
+                            OBSERVACION: formData.get('observacion') || null
+                        };
+
+                        const editId = e.target.dataset.editId;
+                        if (editId) {
+                            await API.updateMedication(editId, data);
+                            Utils.showAlert('Medicamento actualizado exitosamente');
+                            delete e.target.dataset.editId;
+                        } else {
+                            await API.createMedication(data);
+                            Utils.showAlert('Medicamento agregado exitosamente');
+                        }
+                        
+                        UI.hideModal('medication-modal');
+                        e.target.reset();
+                        await this.loadData();
+                    } catch (error) {
+                        Utils.showAlert('Error al procesar el medicamento', 'error');
+                    }
+                });
+            }
+        };
+
+        // Inicializar aplicación cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            App.init();
+        });
+    </script>
+</body>
+</html>

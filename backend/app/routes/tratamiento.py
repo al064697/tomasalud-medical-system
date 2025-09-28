@@ -21,15 +21,30 @@ def get_db():
 
 @router.post("/", response_model=schemas.tratamiento.TratamientoOut)
 def create_tratamiento(tratamiento: schemas.tratamiento.TratamientoCreate, db: Session = Depends(get_db)):
-    db_tratamiento = models.tratamiento.Tratamiento(**tratamiento.dict())
-    db.add(db_tratamiento)
-    db.commit()
-    db.refresh(db_tratamiento)
-    return db_tratamiento
+    try:
+        print(f"Creando tratamiento: {tratamiento.dict()}")
+        db_tratamiento = models.tratamiento.Tratamiento(**tratamiento.dict())
+        db.add(db_tratamiento)
+        db.commit()
+        db.refresh(db_tratamiento)
+        print(f"Tratamiento creado exitosamente: ID {db_tratamiento.ID_TRATAMIENTO}")
+        return db_tratamiento
+    except Exception as e:
+        db.rollback()
+        print(f"Error al crear tratamiento: {e}")
+        raise HTTPException(status_code=500, detail=f"Error al crear tratamiento: {str(e)}")
 
 @router.get("/", response_model=List[schemas.tratamiento.TratamientoOut])
-def get_tratamientos(db: Session = Depends(get_db)):
-    return db.query(models.tratamiento.Tratamiento).all()
+def get_tratamientos(usuario_id: int = None, db: Session = Depends(get_db)):
+    query = db.query(models.tratamiento.Tratamiento)
+    if usuario_id:
+        query = query.filter(models.tratamiento.Tratamiento.ID_USUARIO == usuario_id)
+    try:
+        tratamientos = query.all()
+        return tratamientos
+    except Exception as e:
+        print(f"Error al obtener tratamientos: {e}")
+        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
 
 @router.get("/{tratamiento_id}", response_model=schemas.tratamiento.TratamientoOut)
 def get_tratamiento(tratamiento_id: int, db: Session = Depends(get_db)):

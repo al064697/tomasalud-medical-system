@@ -173,6 +173,39 @@ body {
     background-color: #f5f5f5;
     border-left: 4px solid var(--primary-color);
     border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.medications-panel li:hover {
+    background-color: #e8f6f5;
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.medications-panel li.selected {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-left-color: #2a8a84;
+    box-shadow: 0 4px 12px rgba(65, 193, 186, 0.3);
+}
+
+.medication-item {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.medication-item:hover {
+    background-color: #e8f6f5;
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.medication-item.selected {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-left-color: #2a8a84;
+    box-shadow: 0 4px 12px rgba(65, 193, 186, 0.3);
 }
 
 .dashboard-footer {
@@ -212,4 +245,97 @@ body {
 .login-message {
     margin-top: 15px;
     display: none;
+}
+
+/* Estilos para alarmas en tiempo real */
+.alarma-card {
+    background: var(--card-background);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    transition: all 0.3s ease;
+    border-left: 4px solid #007bff;
+}
+
+.alarma-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.alarma-pendiente {
+    border-left-color: #dc3545;
+    background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+    animation: pulseAlert 2s infinite;
+}
+
+.alarma-completada {
+    border-left-color: #28a745;
+    background: linear-gradient(135deg, #f0fff4 0%, #fff 100%);
+    opacity: 0.8;
+}
+
+@keyframes pulseAlert {
+    0% { box-shadow: 0 2px 8px var(--shadow-color); }
+    50% { box-shadow: 0 4px 16px rgba(220, 53, 69, 0.3); }
+    100% { box-shadow: 0 2px 8px var(--shadow-color); }
+}
+
+.alarma-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-completada {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-pendiente {
+    background-color: #dc3545;
+    color: white;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.5; }
+}
+
+.alarma-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-tomado, .btn-posponer {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.btn-tomado {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-tomado:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.btn-posponer {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.btn-posponer:hover {
+    background-color: #e0a806;
+    transform: scale(1.05);
 }

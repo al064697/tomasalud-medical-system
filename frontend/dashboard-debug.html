@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Debug Dashboard - TomaSalud</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <style>
+        .debug-panel {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin: 20px 0;
+            border: 2px solid #ff6b35;
+        }
+        .debug-buttons {
+            margin: 10px 0;
+        }
+        .debug-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 12px;
+        }
+        .status-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin: 5px;
+        }
+        .status-ok { background: #d4edda; color: #155724; }
+        .status-error { background: #f8d7da; color: #721c24; }
+        .status-warning { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <main class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="logo-area">
+                <img src="assets/images/logo.png" alt="Logo de TomaSalud" class="logo-image">
+                <span class="logo-text">🔍 TomaSalud Debug</span>
+            </div>
+            <div class="user-profile">
+                <span class="username" id="username-display">Usuario Debug</span>
+                <img src="assets/images/usuario.png" alt="Icono de usuario" class="user-icon">
+            </div>
+        </header>
+
+        <!-- Panel de Debug -->
+        <section style="padding: 20px; background: #f8f9fa;">
+            <h2>🔍 Panel de Debug - Medicamentos</h2>
+            
+            <div class="debug-buttons">
+                <button class="debug-btn" onclick="debugAuth()">🔐 Debug Auth</button>
+                <button class="debug-btn" onclick="debugMedicamentos()">💊 Debug Medicamentos</button>
+                <button class="debug-btn" onclick="hacerLogin()">🔓 Hacer Login</button>
+                <button class="debug-btn" onclick="cargarMedicamentosManual()">📥 Cargar Medicamentos</button>
+                <button class="debug-btn" onclick="limpiarConsola()">🧹 Limpiar</button>
+            </div>
+
+            <div>
+                <span>Estado Auth:</span><span id="auth-status" class="status-indicator status-warning">Verificando...</span>
+                <span>Estado Medicamentos:</span><span id="med-status" class="status-indicator status-warning">Pendiente</span>
+            </div>
+
+            <div class="debug-panel" id="debug-console">
+=== Debug Dashboard Medicamentos ===
+Página cargada - Iniciando diagnóstico...
+            </div>
+        </section>
+
+        <section class="dashboard-content">
+            <!-- Panel de Medicamentos con Debug -->
+            <div class="medications-panel">
+                <div class="medications-panel-header">
+                    <h3 class="panel-title">💊 Medicamentos (Debug)</h3>
+                    <div class="medications-header-buttons">
+                        <button class="action-button edit-button-medications">Editar</button>
+                        <button class="action-button delete-button-medications">Eliminar</button>
+                    </div>
+                </div>
+                <ul class="medication-list" id="medication-list">
+                    <li style="color: #666; text-align: center; padding: 20px;">
+                        🔍 Debug Mode - Medicamentos aparecerán aquí
+                    </li>
+                </ul>
+                <div class="panel-footer">
+                    <button class="add-button" id="add-medication-button">+ Nuevo Medicamento</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="assets/js/config.js"></script>
+    <script>
+        const BASE_URL = 'http://127.0.0.1:8000';
+        let currentUserId = null;
+        let medicamentoSeleccionado = null;
+
+        function debugLog(message) {
+            const console = document.getElementById('debug-console');
+            const timestamp = new Date().toLocaleTimeString();
+            console.textContent += `\n[${timestamp}] ${message}`;
+            console.scrollTop = console.scrollHeight;
+            window.console.log(`[DEBUG] ${message}`);
+        }
+
+        function updateStatus(elementId, text, type = 'warning') {
+            const element = document.getElementById(elementId);
+            element.textContent = text;
+            element.className = `status-indicator status-${type}`;
+        }
+
+        function limpiarConsola() {
+            document.getElementById('debug-console').textContent = '=== Debug Dashboard Medicamentos ===\nConsola limpiada...';
+        }
+
+        async function debugAuth() {
+            debugLog('🔐 === DEBUG AUTENTICACIÓN ===');
+            
+            // Verificar localStorage
+            const userData = localStorage.getItem('user_data');
+            const userId = localStorage.getItem('user_id');
+            const id = localStorage.getItem('id');
+            
+            debugLog(`📦 localStorage.user_data: ${userData ? 'EXISTS' : 'NULL'}`);
+            debugLog(`📦 localStorage.user_id: ${userId ? userId : 'NULL'}`);
+            debugLog(`📦 localStorage.id: ${id ? id : 'NULL'}`);
+            
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    debugLog(`✅ user_data parseado: ${JSON.stringify(user, null, 2)}`);
+                    currentUserId = user.user_id || user.id;
+                } catch (e) {
+                    debugLog(`❌ Error parseando user_data: ${e.message}`);
+                }
+            }
+            
+            if (userId) {
+                currentUserId = userId;
+                debugLog(`✅ Usuario desde user_id: ${currentUserId}`);
+            }
+            
+            debugLog(`🎯 currentUserId final: ${currentUserId}`);
+            
+            if (currentUserId) {
+                updateStatus('auth-status', `Autenticado: ${currentUserId}`, 'ok');
+            } else {
+                updateStatus('auth-status', 'No autenticado', 'error');
+            }
+        }
+
+        async function hacerLogin() {
+            try {
+                debugLog('🔐 Haciendo login...');
+                updateStatus('auth-status', 'Haciendo login...', 'warning');
+                
+                const response = await fetch(`${BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'freligio008@gmail.com',
+                        password: '123456'
+                    })
+                });
+
+                const data = await response.json();
+                debugLog(`📊 Respuesta login: ${JSON.stringify(data, null, 2)}`);
+                
+                if (response.ok) {
+                    currentUserId = data.user_id;
+                    localStorage.setItem('user_id', data.user_id);
+                    localStorage.setItem('user_data', JSON.stringify(data));
+                    
+                    updateStatus('auth-status', `Login OK: ${data.user_id}`, 'ok');
+                    debugLog(`✅ Login exitoso - Usuario ID: ${data.user_id}`);
+                    
+                    // Auto-cargar medicamentos después del login
+                    setTimeout(() => cargarMedicamentosManual(), 1000);
+                } else {
+                    updateStatus('auth-status', `Error: ${data.detail}`, 'error');
+                    debugLog(`❌ Error login: ${data.detail}`);
+                }
+            } catch (error) {
+                updateStatus('auth-status', `Error: ${error.message}`, 'error');
+                debugLog(`❌ Error login: ${error.message}`);
+            }
+        }
+
+        async function debugMedicamentos() {
+            debugLog('💊 === DEBUG MEDICAMENTOS ===');
+            
+            // Verificar elementos DOM
+            const medicamentosList = document.querySelector('.medication-list');
+            debugLog(`📋 Elemento .medication-list: ${medicamentosList ? 'ENCONTRADO' : 'NO ENCONTRADO'}`);
+            
+            if (medicamentosList) {
+                debugLog(`📋 ID del elemento: ${medicamentosList.id}`);
+                debugLog(`📋 Clases: ${medicamentosList.className}`);
+                debugLog(`📋 Contenido actual: ${medicamentosList.innerHTML.substring(0, 100)}...`);
+            }
+            
+            // Verificar usuario
+            debugLog(`👤 currentUserId: ${currentUserId}`);
+            
+            if (!currentUserId) {
+                debugLog('❌ No hay usuario - ejecutando debugAuth...');
+                await debugAuth();
+            }
+        }
+
+        async function cargarMedicamentosManual() {
+            if (!currentUserId) {
+                debugLog('❌ No hay usuario logueado');
+                updateStatus('med-status', 'Sin usuario', 'error');
+                return;
+            }
+
+            try {
+                debugLog(`💊 Cargando medicamentos para usuario: ${currentUserId}`);
+                updateStatus('med-status', 'Cargando...', 'warning');
+                
+                const url = `${BASE_URL}/medicamentos/?usuario_id=${currentUserId}`;
+                debugLog(`🌐 URL: ${url}`);
+                
+                const response = await fetch(url);
+                debugLog(`📡 Response status: ${response.status}`);
+                debugLog(`📡 Response ok: ${response.ok}`);
+                
+                const medicamentos = await response.json();
+                debugLog(`💊 Medicamentos recibidos: ${JSON.stringify(medicamentos, null, 2)}`);
+                
+                const medicamentosList = document.getElementById('medication-list');
+                if (!medicamentosList) {
+                    debugLog('❌ No se encontró #medication-list');
+                    return;
+                }
+                
+                debugLog('🧹 Limpiando lista...');
+                medicamentosList.innerHTML = '';
+
+                if (Array.isArray(medicamentos) && medicamentos.length > 0) {
+                    debugLog(`✅ Procesando ${medicamentos.length} medicamentos...`);
+                    
+                    medicamentos.forEach((medicamento, index) => {
+                        debugLog(`💊 Creando elemento ${index + 1}: ${medicamento.NOMBRE}`);
+                        
+                        const li = document.createElement('li');
+                        li.className = 'medication-item';
+                        li.dataset.medicamentoId = medicamento.ID_MEDICAMENTO;
+                        li.innerHTML = `
+                            <div class="medication-info">
+                                <strong>${medicamento.NOMBRE || 'Sin nombre'}</strong>
+                                <div class="medication-details">
+                                    <span>Dosis: ${medicamento.DOSIS || 'Sin dosis'}</span>
+                                    <span>Hora: ${medicamento.HORA || 'Sin hora'}</span>
+                                    <span>ID: ${medicamento.ID_MEDICAMENTO}</span>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Event listener con debug
+                        li.addEventListener('click', function() {
+                            debugLog(`🎯 CLICK en medicamento: ${medicamento.NOMBRE} (ID: ${medicamento.ID_MEDICAMENTO})`);
+                            
+                            // Limpiar selecciones
+                            document.querySelectorAll('.medication-item').forEach(item => {
+                                item.classList.remove('selected');
+                            });
+                            
+                            // Seleccionar actual
+                            li.classList.add('selected');
+                            medicamentoSeleccionado = medicamento;
+                            
+                            debugLog(`✅ Medicamento seleccionado: ${medicamento.NOMBRE}`);
+                        });
+                        
+                        medicamentosList.appendChild(li);
+                        debugLog(`✅ Elemento ${index + 1} agregado al DOM`);
+                    });
+                    
+                    updateStatus('med-status', `${medicamentos.length} medicamentos cargados`, 'ok');
+                    debugLog(`🎉 ${medicamentos.length} medicamentos cargados exitosamente`);
+                } else {
+                    medicamentosList.innerHTML = '<li style="color: #666; text-align: center; padding: 20px;">No hay medicamentos registrados</li>';
+                    updateStatus('med-status', 'Sin medicamentos', 'warning');
+                    debugLog('⚠️ No hay medicamentos para mostrar');
+                }
+            } catch (error) {
+                debugLog(`❌ Error cargando medicamentos: ${error.message}`);
+                updateStatus('med-status', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-ejecutar al cargar la página
+        window.addEventListener('load', async () => {
+            debugLog('📱 Página cargada');
+            await debugAuth();
+            
+            if (currentUserId) {
+                debugLog('🚀 Usuario detectado, cargando medicamentos...');
+                setTimeout(() => cargarMedicamentosManual(), 1000);
+            } else {
+                debugLog('⚠️ No hay usuario, necesitas hacer login');
+            }
+        });
+    </script>
+</body>
+</html>

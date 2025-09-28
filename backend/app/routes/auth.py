@@ -40,8 +40,7 @@ def registrar_usuario(usuario_data: schemas_auth.UsuarioRegister, db: Session = 
             detail="El correo electrónico ya está registrado"
         )
     
-    # Hashear la contraseña usando hashlib como alternativa temporal
-    # hashed_password = pwd_context.hash(usuario_data.contrasena)
+    # Hashear la contraseña usando sha256 (temporal)
     hashed_password = hashlib.sha256(usuario_data.contrasena.encode()).hexdigest()
     
     # Convertir sexo de string a boolean (True = Masculino, False = Femenino)
@@ -65,3 +64,40 @@ def registrar_usuario(usuario_data: schemas_auth.UsuarioRegister, db: Session = 
     db.commit()
     db.refresh(db_usuario)
     return db_usuario
+
+@router.post("/login", response_model=schemas_auth.Token)
+def login_usuario(login_data: schemas_auth.LoginRequiest, db: Session = Depends(get_db)):
+    """
+    Autentica un usuario y devuelve un token de acceso
+    """
+    # Buscar usuario por correo
+    user = db.query(models.usuario.Usuario).filter(
+        models.usuario.Usuario.CORREO == login_data.email
+    ).first()
+    
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Credenciales inválidas",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Verificar contraseña usando sha256 (temporal)
+    hashed_password = hashlib.sha256(login_data.password.encode()).hexdigest()
+    
+    if user.CONTRASENA_HASH != hashed_password:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Credenciales inválidas",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Crear token simple (en producción debería usar JWT)
+    access_token = f"token_{user.ID_USUARIO}_{datetime.now().timestamp()}"
+    
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user_id": user.ID_USUARIO,
+        "nombre": user.NOMBRE
+    }
