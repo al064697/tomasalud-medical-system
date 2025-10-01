@@ -7,6 +7,9 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="../assets/js/config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../assets/js/alarmas.js" defer></script>
     <style>
         * {
             margin: 0;
@@ -14,41 +17,156 @@
             box-sizing: border-box;
         }
 
-        :root {
+                        :root {
             --primary: #41c1ba;
             --primary-dark: #2d8b87;
             --primary-light: #7dd3cf;
             --secondary: #325866;
             --secondary-dark: #1e3d4a;
-            --background: #f8fafb;
-            --surface: #ffffff;
-            --surface-elevated: #ffffff;
-            --text-primary: #1a202c;
-            --text-secondary: #718096;
-            --text-muted: #a0aec0;
-            --border: #e2e8f0;
-            --border-light: #f1f5f9;
+            --accent: #ff6b6b;
             --success: #48bb78;
             --warning: #ed8936;
             --error: #f56565;
-            --info: #4299e1;
-            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            --radius-sm: 6px;
+            --info: #339af0;
+            --text: #1a202c;
+            --text-light: #718096;
+            --text-muted: #a0aec0;
+            --border: #e2e8f0;
+            --bg: #f8fafb;
+            --bg-gray: #ffffff;
+            --surface: #ffffff;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --radius: 6px;
             --radius-md: 8px;
             --radius-lg: 12px;
-            --radius-xl: 16px;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--background);
-            color: var(--text-primary);
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+        }
+
+        .alarmas-container {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .alarma-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .alarma-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .alarma-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .alarma-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .estado {
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .estado.pendiente {
+            background: var(--warning);
+            color: white;
+        }
+
+        .estado.completada {
+            background: var(--success);
+            color: white;
+        }
+
+        .estado.omitida {
+            background: var(--text-muted);
+            color: white;
+        }
+
+        .alarma-body {
+            color: var(--text-light);
+        }
+
+        .alarma-body p {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-alarmas {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 1.125rem;
+        }
+
+        .alarma-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            border: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action.complete {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-action.snooze {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-action.skip {
+            background: var(--text-muted);
+            color: white;
+        }
+
+        .btn-action:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-action:active {
+            transform: translateY(0);
         }
 
         /* Layout Principal */
@@ -660,6 +778,7 @@
 
         <!-- Main Content -->
         <main class="main-content">
+
             <!-- Estadísticas -->
             <div class="stats-grid">
                 <div class="stat-card">
@@ -744,20 +863,276 @@
         </main>
     </div>
 
+    </div>
+</body>
+</html>
+
     <script>
-        // Configuración
-        const CONFIG = {
-            API_URL: 'http://127.0.0.1:8000'
+        // Estado global de la aplicación
+        const AppState = {
+            token: localStorage.getItem('token'),
+            userData: JSON.parse(localStorage.getItem('userData') || '{}'),
+            loading: false,
+            lastUpdate: null,
+            refreshInterval: null
         };
 
-        // Estado de la aplicación
-        const AppState = {
-            user: null,
-            token: null,
-            alarms: [],
-            currentFilter: 'all',
-            loading: false
+        // Funciones de utilidad
+        const Utils = {
+            formatDate(date) {
+                return new Date(date).toLocaleString('es-MX', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            },
+
+            async request(endpoint, options = {}) {
+                const url = getApiUrl(endpoint);
+                const token = localStorage.getItem('token');
+                
+                return apiRequest(url, {
+                    ...options,
+                    headers: {
+                        ...options.headers,
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            },
+
+            showToast(message, type = 'success') {
+                Swal.fire({
+                    text: message,
+                    icon: type,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
         };
+
+        // Aplicación principal
+        const App = {
+            async init() {
+                try {
+                    if (!AppState.token || !AppState.userData.user_id) {
+                        window.location.href = '../index.html';
+                        return;
+                    }
+                    
+                    await this.loadAlarmas();
+                    this.setupEventListeners();
+                    AutoRefresh.start();
+                } catch (error) {
+                    console.error('Error inicializando la aplicación:', error);
+                    Utils.showToast('Error al cargar la aplicación', 'error');
+                }
+            },
+
+            async loadAlarmas() {
+                const alarmasContainer = document.querySelector('.alarmas-container');
+                try {
+                    AppState.loading = true;
+                    alarmasContainer.innerHTML = '<p class="no-alarmas">Cargando alarmas...</p>';
+
+                    // Obtener alarmas del usuario
+                    const alarmas = await Utils.request(`${CONFIG.ENDPOINTS.ALARMAS}?user_id=${AppState.userData.user_id}`);
+                    
+                    if (!alarmas || alarmas.length === 0) {
+                        alarmasContainer.innerHTML = '<p class="no-alarmas">No hay alarmas programadas</p>';
+                        return;
+                    }
+
+                    // Ordenar alarmas por hora programada
+                    alarmas.sort((a, b) => new Date(a.hora_programada) - new Date(b.hora_programada));
+
+                    // Renderizar alarmas
+                    alarmasContainer.innerHTML = alarmas.map(alarma => `
+                        <div class="alarma-card" data-id="${alarma.id_alarma}">
+                            <div class="alarma-header">
+                                <h3>${alarma.medicamento_nombre || 'Sin nombre'}</h3>
+                                <span class="estado ${alarma.estado.toLowerCase()}">${alarma.estado}</span>
+                            </div>
+                            <div class="alarma-body">
+                                <p><i class="fas fa-clock"></i> ${Utils.formatDate(alarma.hora_programada)}</p>
+                                <p><i class="fas fa-pills"></i> ${alarma.dosis || 'Dosis no especificada'}</p>
+                                <p><i class="fas fa-file-medical"></i> ${alarma.nombre_tratamiento || 'Tratamiento sin nombre'}</p>
+                            </div>
+                            <div class="alarma-actions">
+                                ${alarma.estado === 'PENDIENTE' ? `
+                                    <button class="btn-action complete" onclick="App.completarAlarma(${alarma.id_alarma})">
+                                        <i class="fas fa-check"></i> Completar
+                                    </button>
+                                    <button class="btn-action snooze" onclick="App.posponerAlarma(${alarma.id_alarma})">
+                                        <i class="fas fa-clock"></i> Posponer
+                                    </button>
+                                    <button class="btn-action skip" onclick="App.omitirAlarma(${alarma.id_alarma})">
+                                        <i class="fas fa-forward"></i> Omitir
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error cargando alarmas:', error);
+                    Utils.showToast('Error al cargar las alarmas', 'error');
+                    alarmasContainer.innerHTML = '<p class="no-alarmas">Error al cargar las alarmas</p>';
+                } finally {
+                    AppState.loading = false;
+                }
+            },
+
+            setupEventListeners() {
+                // Puedes agregar event listeners aquí si es necesario
+            },
+
+            async completarAlarma(idAlarma) {
+                try {
+                    await Utils.request(`${CONFIG.ENDPOINTS.ALARMAS}/${idAlarma}/completar`, {
+                        method: 'PUT'
+                    });
+                    Utils.showToast('Alarma completada con éxito');
+                    await this.loadAlarmas();
+                } catch (error) {
+                    console.error('Error completando alarma:', error);
+                    Utils.showToast('Error al completar la alarma', 'error');
+                }
+            },
+
+            async posponerAlarma(idAlarma) {
+                try {
+                    await Utils.request(`${CONFIG.ENDPOINTS.ALARMAS}/${idAlarma}/posponer`, {
+                        method: 'PUT'
+                    });
+                    Utils.showToast('Alarma pospuesta');
+                    await this.loadAlarmas();
+                } catch (error) {
+                    console.error('Error posponiendo alarma:', error);
+                    Utils.showToast('Error al posponer la alarma', 'error');
+                }
+            },
+
+            async omitirAlarma(idAlarma) {
+                try {
+                    await Utils.request(`${CONFIG.ENDPOINTS.ALARMAS}/${idAlarma}/omitir`, {
+                        method: 'PUT'
+                    });
+                    Utils.showToast('Alarma omitida');
+                    await this.loadAlarmas();
+                } catch (error) {
+                    console.error('Error omitiendo alarma:', error);
+                    Utils.showToast('Error al omitir la alarma', 'error');
+                }
+            }
+        };
+
+        const App = {
+            async init() {
+                if (!AppState.token) {
+                    window.location.href = '../index.html';
+                    return;
+                }
+                await this.loadAlarms();
+                AutoRefresh.start();
+            },
+
+            async loadAlarms() {
+                const alarmasContainer = document.querySelector('.alarmas-container');
+                try {
+                    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    if (!userData.user_id) {
+                        throw new Error('No hay ID de usuario');
+                    }
+
+                    const response = await fetch(`${CONFIG.API_BASE_URL}${CONFIG.ENDPOINTS.ALARMAS}?user_id=${userData.user_id}`, {
+                        headers: {
+                            'Authorization': `Bearer ${AppState.token}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Error ${response.status}`);
+                    }
+
+                    const alarmas = await response.json();
+                    
+                    if (!alarmas || alarmas.length === 0) {
+                        alarmasContainer.innerHTML = '<p class="no-alarmas">No hay alarmas programadas</p>';
+                        return;
+                    }
+
+                    alarmasContainer.innerHTML = alarmas.map(alarma => `
+                        <div class="alarma-card">
+                            <div class="alarma-header">
+                                <h3>${alarma.medicamento_nombre || 'Medicamento'}</h3>
+                                <span class="estado ${alarma.estado.toLowerCase()}">${alarma.estado}</span>
+                            </div>
+                            <div class="alarma-body">
+                                <p><i class="fas fa-clock"></i> ${new Date(alarma.hora_programada).toLocaleString()}</p>
+                                <p><i class="fas fa-pills"></i> ${alarma.dosis || 'No especificada'}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error cargando alarmas:', error);
+                    alarmasContainer.innerHTML = '<p class="no-alarmas">Error cargando las alarmas</p>';
+                }
+            }
+        };
+
+        const AutoRefresh = {
+            start() {
+                if (!AppState.refreshInterval) {
+                    this.checkAndUpdate();
+                    AppState.refreshInterval = setInterval(() => this.checkAndUpdate(), 30000);
+                }
+            },
+
+            stop() {
+                if (AppState.refreshInterval) {
+                    clearInterval(AppState.refreshInterval);
+                    AppState.refreshInterval = null;
+                }
+            },
+
+            async checkAndUpdate() {
+                const now = new Date();
+                if (!AppState.lastUpdate || (now - AppState.lastUpdate) >= 30000) {
+                    await App.loadAlarms();
+                    AppState.lastUpdate = now;
+                }
+            }
+        };
+
+        // Inicializar cuando el documento esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            App.init();
+        });
+
+        // Obtener ID de usuario desde localStorage
+        try {
+            const userData = localStorage.getItem('user_data') || localStorage.getItem('user');
+            const userId = localStorage.getItem('user_id') || localStorage.getItem('id');
+            
+            if (userData) {
+                const user = JSON.parse(userData);
+                AppState.userId = user.user_id || user.id || userId;
+                AppState.user = user;
+                console.log('✅ Usuario logueado ID:', AppState.userId);
+            } else if (userId) {
+                AppState.userId = userId;
+                console.log('✅ Usuario logueado ID (directo):', AppState.userId);
+            } else {
+                console.warn('⚠️ No se encontraron datos de usuario');
+                window.location.href = '../index.html';
+            }
+        } catch (error) {
+            console.error('❌ Error obteniendo ID de usuario:', error);
+            window.location.href = '../index.html';
+        }
 
         // Utilidades
         const Utils = {
@@ -815,16 +1190,22 @@
             },
 
             getAlarmStatus(alarm) {
+                // Si ya está completada/tomada
+                if (alarm.COMPLETADA || alarm.ESTADO === 'TOMADA') {
+                    return 'completed';
+                }
+                
                 const now = new Date();
                 const alarmDateTime = new Date(`${alarm.FECHA_ALARMA}T${alarm.HORA_ALARMA}`);
                 
-                if (alarm.COMPLETADA) {
-                    return 'completed';
-                } else if (alarmDateTime < now) {
-                    return 'pending';
-                } else {
+                // Si es hoy y está dentro de la ventana de 30 minutos
+                const diffInMinutes = (alarmDateTime - now) / (1000 * 60);
+                
+                if (diffInMinutes <= 30 && diffInMinutes >= -30) {
                     return 'active';
                 }
+                
+                return 'pending';
             }
         };
 
@@ -1009,15 +1390,86 @@
                 try {
                     AppState.loading = true;
                     
-                    // Simular alarmas (ya que no tenemos endpoint real)
-                    const mockAlarms = this.generateMockAlarms();
-                    AppState.alarms = mockAlarms;
+                    // Obtener el user_id del localStorage
+                    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    const userId = userData.user_id;
+                    const token = localStorage.getItem('token');
+                    
+                    if (!userId || !token) {
+                        console.log('No hay usuario autenticado:', { userId, token });
+                        this.showNotification('Debe iniciar sesión para ver las alarmas', 'error');
+                        window.location.href = '../index.html';
+                        return;
+                    }
+
+                    console.log('Cargando alarmas para usuario:', userId);
+                    const response = await fetch(`${CONFIG.API_BASE_URL}${CONFIG.ENDPOINTS.ALARMAS}?user_id=${userId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Error al cargar alarmas: ${response.status}`);
+                    }
+
+                    const alarmas = await response.json();
+                    console.log('Alarmas cargadas:', alarmas);
+                    
+                    // Mostrar las alarmas en la interfaz
+                    const alarmasContainer = document.querySelector('.alarmas-container');
+                    if (!alarmas || alarmas.length === 0) {
+                        alarmasContainer.innerHTML = '<p class="no-alarmas">No hay alarmas programadas</p>';
+                        return;
+                    }
+
+                    alarmasContainer.innerHTML = alarmas.map(alarma => `
+                        <div class="alarma-card">
+                            <div class="alarma-header">
+                                <h3>${alarma.medicamento_nombre || 'Medicamento'}</h3>
+                                <span class="estado ${alarma.estado.toLowerCase()}">${alarma.estado}</span>
+                            </div>
+                            <div class="alarma-body">
+                                <p><i class="fas fa-clock"></i> ${new Date(alarma.hora_programada).toLocaleString()}</p>
+                                <p><i class="fas fa-pills"></i> ${alarma.dosis || 'No especificada'}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                        // Redirigir al login después de un delay
+                        setTimeout(() => {
+                            window.location.href = '../index.html';
+                        }, 2000);
+                        return;
+                    }
+                    
+                    // Cargar alarmas reales desde la API con filtro por usuario
+                    const alarmas = await Utils.request(`/alarmas/pendientes?user_id=${userId}`);
+                    
+                    // Transformar datos para compatibilidad con el UI
+                    AppState.alarms = alarmas.map(alarma => ({
+                        ID_ALARMA: alarma.ID_ALARMA,
+                        FECHA_ALARMA: alarma.HORA_PROGRAMADA.split('T')[0],
+                        HORA_ALARMA: alarma.HORA_PROGRAMADA.split('T')[1].split('.')[0],
+                        COMPLETADA: alarma.ESTADO === 'TOMADA',
+                        ESTADO: alarma.ESTADO,
+                        medicamento: {
+                            NOMBRE: alarma.medicamento_nombre,
+                            DOSIS: alarma.medicamento_dosis,
+                            INTERVALO: 8, // Valor por defecto, no viene en la respuesta
+                            OBSERVACION: null // No viene en la respuesta actual
+                        },
+                        tratamiento: {
+                            NOMBRE: alarma.tratamiento_nombre
+                        }
+                    }));
                     
                     UI.updateStats();
                     UI.renderAlarms(AppState.currentFilter);
                     
                 } catch (error) {
                     console.error('Error loading alarms:', error);
+                    this.showNotification('Error al cargar las alarmas. Verificar conexión con el servidor.', 'error');
+                    // No mostrar datos mock cuando hay error de autenticación
                 } finally {
                     AppState.loading = false;
                 }
@@ -1089,49 +1541,135 @@
 
             async completeAlarm(alarmId) {
                 try {
-                    // Marcar como completada localmente
+                    // Llamar al endpoint para marcar como tomada
+                    await Utils.request(`/alarmas/${alarmId}/tomada`, { method: 'POST' });
+                    
+                    // Actualizar estado local
                     const alarm = AppState.alarms.find(a => a.ID_ALARMA === alarmId);
                     if (alarm) {
                         alarm.COMPLETADA = true;
+                        alarm.ESTADO = 'TOMADA';
                         UI.updateStats();
                         UI.renderAlarms(AppState.currentFilter);
+                        
+                        // Mostrar notificación de éxito
+                        this.showNotification('Alarma marcada como tomada', 'success');
                     }
                 } catch (error) {
                     console.error('Error completing alarm:', error);
+                    this.showNotification('Error al marcar la alarma como tomada', 'error');
                 }
             },
 
             async snoozeAlarm(alarmId) {
                 try {
-                    // Posponer 15 minutos
-                    const alarm = AppState.alarms.find(a => a.ID_ALARMA === alarmId);
-                    if (alarm) {
-                        const currentTime = new Date(`2000-01-01T${alarm.HORA_ALARMA}`);
-                        currentTime.setMinutes(currentTime.getMinutes() + 15);
-                        alarm.HORA_ALARMA = currentTime.toTimeString().split(' ')[0];
-                        
-                        UI.renderAlarms(AppState.currentFilter);
-                    }
+                    // Llamar al endpoint para posponer
+                    await Utils.request(`/alarmas/${alarmId}/posponer?minutos=15`, { method: 'POST' });
+                    
+                    // Recargar alarmas para reflejar el cambio
+                    await this.loadAlarms();
+                    
+                    // Mostrar notificación de éxito
+                    this.showNotification('Alarma pospuesta 15 minutos', 'info');
                 } catch (error) {
                     console.error('Error snoozing alarm:', error);
+                    this.showNotification('Error al posponer la alarma', 'error');
                 }
             },
 
             async skipAlarm(alarmId) {
                 try {
-                    // Eliminar de la lista local
+                    // Eliminar de la lista local (no hay endpoint específico para omitir)
                     AppState.alarms = AppState.alarms.filter(a => a.ID_ALARMA !== alarmId);
                     UI.updateStats();
                     UI.renderAlarms(AppState.currentFilter);
+                    
+                    this.showNotification('Alarma omitida', 'info');
                 } catch (error) {
                     console.error('Error skipping alarm:', error);
+                    this.showNotification('Error al omitir la alarma', 'error');
+                }
+            },
+
+            showNotification(message, type = 'info') {
+                // Crear elemento de notificación
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--error)' : 'var(--info)'};
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: var(--radius-md);
+                    box-shadow: var(--shadow-lg);
+                    z-index: 1000;
+                    font-weight: 500;
+                    transform: translateX(100%);
+                    transition: transform 0.3s ease;
+                `;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                // Mostrar animación
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 100);
+                
+                // Ocultar después de 3 segundos
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+        };
+
+                // Funciones de actualización automática
+        const AutoRefresh = {
+            start() {
+                if (CONFIG.AUTO_REFRESH && !AppState.refreshInterval) {
+                    console.log('🔄 Iniciando actualización automática');
+                    this.checkAndUpdate();
+                    AppState.refreshInterval = setInterval(() => this.checkAndUpdate(), CONFIG.REFRESH_INTERVAL);
+                }
+            },
+
+            stop() {
+                if (AppState.refreshInterval) {
+                    console.log('⏹️ Deteniendo actualización automática');
+                    clearInterval(AppState.refreshInterval);
+                    AppState.refreshInterval = null;
+                }
+            },
+
+            async checkAndUpdate() {
+                const now = new Date();
+                if (!AppState.lastUpdate || (now - AppState.lastUpdate) >= CONFIG.REFRESH_INTERVAL) {
+                    console.log('🔄 Actualizando alarmas...');
+                    await App.loadAlarms();
+                    AppState.lastUpdate = now;
                 }
             }
         };
 
         // Inicializar aplicación
         document.addEventListener('DOMContentLoaded', () => {
-            App.init();
+            App.init().then(() => {
+                // Iniciar actualización automática
+                AutoRefresh.start();
+            });
+        });
+
+        // Manejar visibilidad de la página
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                AutoRefresh.stop();
+            } else {
+                AutoRefresh.start();
+                App.loadAlarms(); // Actualizar inmediatamente al volver
+            }
         });
     </script>
 </body>

@@ -19,9 +19,13 @@ create_tables()
 
 # Configuración de CORS
 origins = [
-    "http://localhost:3000",  # React/Vue en local
-    "http://127.0.0.1:5500",  # Live Server de VSCode (HTML+JS)
-    "*"  #  Permite todos los orígenes (en desarrollo). En producción debes restringirlo
+    "http://localhost:3000",      # Frontend en localhost
+    "http://127.0.0.1:3000",      # Frontend en 127.0.0.1
+    "http://localhost:5500",      # Live Server de VSCode
+    "http://127.0.0.1:5500",      # Live Server en 127.0.0.1
+    "http://localhost:8080",      # Otros puertos comunes
+    "http://127.0.0.1:8080",
+    "*"  # Permite todos los orígenes (solo en desarrollo)
 ]
 
 app.add_middleware(
@@ -31,6 +35,23 @@ app.add_middleware(
     allow_methods=["*"],    # Qué métodos (GET, POST, PUT, DELETE)
     allow_headers=["*"],    # Qué headers
 )
+
+# Ruta raíz
+@app.get("/")
+def read_root():
+    return {
+        "message": "API de Tratamientos Médicos", 
+        "version": "1.0",
+        "docs": "/docs",
+        "endpoints": {
+            "auth": "/auth",
+            "usuarios": "/usuarios", 
+            "tratamientos": "/tratamientos",
+            "medicamentos": "/medicamentos",
+            "historiales": "/historiales",
+            "alarmas": "/alarmas"
+        }
+    }
 
 # Incluir rutas
 app.include_router(auth.router, prefix="/auth", tags=["Autenticación"])
