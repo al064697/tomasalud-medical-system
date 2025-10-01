@@ -1,0 +1,63 @@
+{
+  "name": "tomasalud-medical-system",
+  "version": "1.2.0",
+  "description": "Sistema completo de gestión de tratamientos médicos con exportación PDF",
+  "main": "backend/app/main.py",
+  "author": "Sebastian Eligio Rios Fuentes <sebastian.eligio@email.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/al064697/tomasalud-medical-system.git"
+  },
+  "homepage": "https://github.com/al064697/tomasalud-medical-system#readme",
+  "bugs": {
+    "url": "https://github.com/al064697/tomasalud-medical-system/issues"
+  },
+  "keywords": [
+    "medical",
+    "treatment",
+    "medication",
+    "alarm",
+    "healthcare",
+    "fastapi",
+    "python",
+    "javascript",
+    "pdf-export",
+    "medical-records"
+  ],
+  "engines": {
+    "python": ">=3.8.0"
+  },
+  "features": [
+    "User authentication and registration",
+    "Medical treatment management",
+    "Medication scheduling and alarms", 
+    "Interactive dashboard with statistics",
+    "PDF export for treatment reports",
+    "Complete medical history tracking",
+    "Responsive web interface",
+    "RESTful API with Swagger documentation"
+  ],
+  "technologies": {
+    "backend": [
+      "FastAPI",
+      "SQLAlchemy", 
+      "SQLite",
+      "Pydantic",
+      "Uvicorn"
+    ],
+    "frontend": [
+      "HTML5",
+      "CSS3", 
+      "JavaScript ES6+",
+      "jsPDF",
+      "SweetAlert2",
+      "Font Awesome"
+    ]
+  },
+  "release_notes": {
+    "1.2.0": "Added professional PDF export functionality for treatment reports",
+    "1.1.0": "Added comprehensive documentation and GitHub templates",
+    "1.0.0": "Initial release with complete medical management system"
+  }
+}
