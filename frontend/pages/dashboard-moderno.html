@@ -628,6 +628,17 @@
             font-size: 1.1em;
         }
 
+        /* Estilos para badges de estado de alarmas */
+        .item-badge.warning {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .item-badge.error {
+            background-color: var(--error);
+            color: white;
+        }
+
         .pulse {
             animation: pulse 2s infinite;
         }
@@ -1547,21 +1558,19 @@
                         <div class="item-header">
                             <div class="item-title">
                                 <i class="fas fa-bell"></i>
-                                ${Utils.formatTime(alarm.HORA)}
+                                ${new Date(alarm.HORA_PROGRAMADA).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'})}
                             </div>
-                            <span class="item-badge ${alarm.ESTADO === 'ACTIVA' ? 'success' : ''}">${alarm.ESTADO}</span>
+                            <span class="item-badge ${alarm.ESTADO === 'PENDIENTE' ? 'warning' : alarm.ESTADO === 'TOMADA' ? 'success' : 'error'}">${alarm.ESTADO}</span>
                         </div>
                         <div class="item-meta">
                             <div class="meta-item">
-                                <i class="fas fa-redo"></i>
-                                ${alarm.REPETIR ? 'Repetición diaria' : 'Una vez'}
+                                <i class="fas fa-calendar"></i>
+                                ${new Date(alarm.HORA_PROGRAMADA).toLocaleDateString('es-ES')}
                             </div>
-                            ${alarm.DESCRIPCION ? `
-                                <div class="meta-item">
-                                    <i class="fas fa-sticky-note"></i>
-                                    ${alarm.DESCRIPCION}
-                                </div>
-                            ` : ''}
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                Programada para ${new Date(alarm.HORA_PROGRAMADA).toLocaleDateString('es-ES')} a las ${new Date(alarm.HORA_PROGRAMADA).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'})}
+                            </div>
                         </div>
                     </li>
                 `).join('');

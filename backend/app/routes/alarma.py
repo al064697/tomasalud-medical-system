@@ -20,28 +20,25 @@ router = APIRouter()
 class AlarmaResponse(BaseModel):
     ID_ALARMA: int
     ID_MEDICAMENTO: int
-    HORA: datetime
+    HORA_PROGRAMADA: datetime
     ESTADO: str
-    REPETIR: bool
-    DESCRIPCION: Optional[str] = None
-    medicamento_nombre: str
-    medicamento_dosis: str
-    tratamiento_nombre: str
+    INTERVALO_POSPOSICION: Optional[int] = None
+    medicamento_nombre: Optional[str] = None
+    medicamento_dosis: Optional[str] = None
+    tratamiento_nombre: Optional[str] = None
 
     class Config:
         from_attributes = True
 
 class AlarmaCreate(BaseModel):
     ID_MEDICAMENTO: int
-    HORA: datetime
-    REPETIR: bool = True
-    DESCRIPCION: Optional[str] = None
+    HORA_PROGRAMADA: datetime
+    ESTADO: str = "PENDIENTE"
 
 class AlarmaUpdate(BaseModel):
-    HORA: Optional[datetime] = None
-    REPETIR: Optional[bool] = None
-    DESCRIPCION: Optional[str] = None
+    HORA_PROGRAMADA: Optional[datetime] = None
     ESTADO: Optional[str] = None
+    INTERVALO_POSPOSICION: Optional[int] = None
 
 @router.get("/", response_model=List[AlarmaResponse])
 def obtener_alarmas(usuario_id: int, db: Session = Depends(get_db)):
@@ -56,10 +53,9 @@ def obtener_alarmas(usuario_id: int, db: Session = Depends(get_db)):
         resultado.append(AlarmaResponse(
             ID_ALARMA=alarma.ID_ALARMA,
             ID_MEDICAMENTO=alarma.ID_MEDICAMENTO,
-            HORA=alarma.HORA_PROGRAMADA,
+            HORA_PROGRAMADA=alarma.HORA_PROGRAMADA,
             ESTADO=alarma.ESTADO,
-            REPETIR=True,  # Por ahora todas las alarmas se repiten
-            DESCRIPCION=None,  # Campo nuevo, inicialmente vacío
+            INTERVALO_POSPOSICION=alarma.INTERVALO_POSPOSICION,
             medicamento_nombre=medicamento.NOMBRE,
             medicamento_dosis=medicamento.DOSIS,
             tratamiento_nombre=tratamiento.NOMBRE_TRATAMIENTO
@@ -80,10 +76,9 @@ def obtener_alarma(alarma_id: int, db: Session = Depends(get_db)):
     return AlarmaResponse(
         ID_ALARMA=alarma.ID_ALARMA,
         ID_MEDICAMENTO=alarma.ID_MEDICAMENTO,
-        HORA=alarma.HORA_PROGRAMADA,
+        HORA_PROGRAMADA=alarma.HORA_PROGRAMADA,
         ESTADO=alarma.ESTADO,
-        REPETIR=True,  # Por ahora todas las alarmas se repiten
-        DESCRIPCION=None,  # Campo nuevo, inicialmente vacío
+        INTERVALO_POSPOSICION=alarma.INTERVALO_POSPOSICION,
         medicamento_nombre=medicamento.NOMBRE,
         medicamento_dosis=medicamento.DOSIS,
         tratamiento_nombre=tratamiento.NOMBRE_TRATAMIENTO
@@ -100,8 +95,8 @@ def crear_alarma(alarma: AlarmaCreate, db: Session = Depends(get_db)):
     # Crear la alarma
     datos_alarma = {
         "ID_MEDICAMENTO": alarma.ID_MEDICAMENTO,
-        "HORA_PROGRAMADA": alarma.HORA,
-        "ESTADO": "PENDIENTE"
+        "HORA_PROGRAMADA": alarma.HORA_PROGRAMADA,
+        "ESTADO": alarma.ESTADO
     }
     
     nueva_alarma = AlarmaService.crear_alarma(db, datos_alarma)
@@ -109,10 +104,9 @@ def crear_alarma(alarma: AlarmaCreate, db: Session = Depends(get_db)):
     return AlarmaResponse(
         ID_ALARMA=nueva_alarma.ID_ALARMA,
         ID_MEDICAMENTO=nueva_alarma.ID_MEDICAMENTO,
-        HORA=nueva_alarma.HORA_PROGRAMADA,
+        HORA_PROGRAMADA=nueva_alarma.HORA_PROGRAMADA,
         ESTADO=nueva_alarma.ESTADO,
-        REPETIR=alarma.REPETIR,
-        DESCRIPCION=alarma.DESCRIPCION,
+        INTERVALO_POSPOSICION=nueva_alarma.INTERVALO_POSPOSICION,
         medicamento_nombre=medicamento.NOMBRE,
         medicamento_dosis=medicamento.DOSIS,
         tratamiento_nombre=medicamento.tratamiento.NOMBRE_TRATAMIENTO

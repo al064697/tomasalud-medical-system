@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Alarm Fix</title>
+</head>
+<body>
+    <h1>Test de la Corrección de Alarmas</h1>
+    <div id="alarm-test"></div>
+    
+    <script>
+        // Simular datos de alarma como los devuelve la API
+        const sampleAlarmData = {
+            "ID_ALARMA": 1,
+            "ID_MEDICAMENTO": 1,
+            "HORA_PROGRAMADA": "2025-10-01T08:00:00",
+            "ESTADO": "PENDIENTE",
+            "medicamento_nombre": "Paracetamol",
+            "medicamento_dosis": "150mg",
+            "tratamiento_nombre": "Dolor de cabeza"
+        };
+        
+        // Probar el formato de fecha como lo hace el dashboard
+        function testDateFormatting() {
+            console.log("Testing alarm data:", sampleAlarmData);
+            
+            try {
+                // Este es el código actual del dashboard
+                const dateObject = new Date(sampleAlarmData.HORA_PROGRAMADA);
+                const formattedTime = dateObject.toLocaleTimeString();
+                
+                console.log("Date object:", dateObject);
+                console.log("Formatted time:", formattedTime);
+                console.log("Is valid date:", !isNaN(dateObject.getTime()));
+                
+                // Mostrar en la página
+                document.getElementById('alarm-test').innerHTML = `
+                    <p><strong>HORA_PROGRAMADA:</strong> ${sampleAlarmData.HORA_PROGRAMADA}</p>
+                    <p><strong>Objeto Date:</strong> ${dateObject}</p>
+                    <p><strong>Hora formateada:</strong> ${formattedTime}</p>
+                    <p><strong>¿Es fecha válida?:</strong> ${!isNaN(dateObject.getTime()) ? 'SÍ' : 'NO'}</p>
+                `;
+                
+            } catch (error) {
+                console.error("Error formateando fecha:", error);
+                document.getElementById('alarm-test').innerHTML = `
+                    <p style="color: red;"><strong>Error:</strong> ${error.message}</p>
+                `;
+            }
+        }
+        
+        // Ejecutar test al cargar la página
+        testDateFormatting();
+    </script>
+</body>
+</html>
