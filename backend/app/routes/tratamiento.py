@@ -53,6 +53,37 @@ def get_tratamiento(tratamiento_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Tratamiento no encontrado")
     return tratamiento
 
+@router.get("/{tratamiento_id}/completo", response_model=schemas.tratamiento.TratamientoCompleto)
+def get_tratamiento_completo(tratamiento_id: int, db: Session = Depends(get_db)):
+    """
+    Obtiene un tratamiento completo con todos sus medicamentos incluidos.
+    Útil para generar reportes PDF completos.
+    """
+    tratamiento = db.query(models.tratamiento.Tratamiento).filter(
+        models.tratamiento.Tratamiento.ID_TRATAMIENTO == tratamiento_id
+    ).first()
+    
+    if not tratamiento:
+        raise HTTPException(status_code=404, detail="Tratamiento no encontrado")
+    
+    # Obtener medicamentos del tratamiento
+    medicamentos = db.query(models.medicamento.Medicamento).filter(
+        models.medicamento.Medicamento.ID_TRATAMIENTO == tratamiento_id
+    ).all()
+    
+    # Crear respuesta completa
+    tratamiento_dict = {
+        "ID_TRATAMIENTO": tratamiento.ID_TRATAMIENTO,
+        "ID_USUARIO": tratamiento.ID_USUARIO,
+        "NOMBRE_TRATAMIENTO": tratamiento.NOMBRE_TRATAMIENTO,
+        "FECHA_INICIO": tratamiento.FECHA_INICIO,
+        "FECHA_FIN": tratamiento.FECHA_FIN,
+        "ESTADO": tratamiento.ESTADO,
+        "medicamentos": medicamentos
+    }
+    
+    return tratamiento_dict
+
 @router.put("/{tratamiento_id}", response_model=schemas.tratamiento.TratamientoOut)
 def update_tratamiento(tratamiento_id: int, tratamiento: schemas.tratamiento.TratamientoUpdate, db: Session = Depends(get_db)):
     db_tratamiento = db.query(models.tratamiento.Tratamiento).filter(models.tratamiento.Tratamiento.ID_TRATAMIENTO == tratamiento_id).first()

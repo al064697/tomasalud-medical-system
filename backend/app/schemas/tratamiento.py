@@ -6,7 +6,8 @@ Esquemas Pydantic para tratamientos médicos.
 
 from pydantic import BaseModel
 from datetime import date
-from typing import Optional
+from typing import Optional, List
+from .medicamento import MedicamentoOut
 
 class TratamientoBase(BaseModel):
     ID_USUARIO: int
@@ -26,6 +27,12 @@ class TratamientoUpdate(BaseModel):
 
 class TratamientoOut(TratamientoBase):
     ID_TRATAMIENTO: int
+
+    class Config:
+        orm_mode = True
+
+class TratamientoCompleto(TratamientoOut):
+    medicamentos: List[MedicamentoOut] = []
 
     class Config:
         orm_mode = True

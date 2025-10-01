@@ -612,6 +612,22 @@
             pointer-events: none;
         }
 
+        /* Estilo específico para botón PDF */
+        #export-pdf-btn {
+            color: var(--error);
+            transition: all 0.2s ease;
+        }
+
+        #export-pdf-btn:hover {
+            background-color: var(--error);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        #export-pdf-btn i {
+            font-size: 1.1em;
+        }
+
         .pulse {
             animation: pulse 2s infinite;
         }
@@ -621,6 +637,8 @@
             50% { opacity: 0.5; }
         }
     </style>
+    <!-- jsPDF Library for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -692,6 +710,9 @@
                         <div class="card-title">
                             <h3><i class="fas fa-clipboard-list"></i> Tratamientos</h3>
                             <div class="card-actions">
+                                <button class="btn btn-ghost btn-sm" id="export-pdf-btn" title="Exportar a PDF">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button>
                                 <button class="btn btn-ghost btn-sm" id="edit-treatment-btn" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
@@ -998,6 +1019,230 @@
                     hour: '2-digit',
                     minute: '2-digit'
                 });
+            },
+
+            async exportTreatmentToPDF(treatment) {
+                if (!treatment) {
+                    this.showAlert('Selecciona un tratamiento para exportar', 'error');
+                    return;
+                }
+
+                try {
+                    this.showAlert('Generando PDF...', 'info');
+                    
+                    // Obtener tratamiento completo del backend
+                    const response = await fetch(`${CONFIG.API_URL}/tratamientos/${treatment.ID_TRATAMIENTO}/completo`);
+                    if (!response.ok) {
+                        throw new Error('Error al obtener información del tratamiento');
+                    }
+                    const treatmentComplete = await response.json();
+
+                    // Crear instancia de jsPDF
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+
+                    // Configuración de fuentes y colores
+                    const primaryColor = [65, 193, 186]; // #41c1ba
+                    const darkColor = [26, 32, 44]; // #1a202c
+                    const grayColor = [113, 128, 150]; // #718096
+
+                    // Header con logo y título
+                    doc.setFillColor(...primaryColor);
+                    doc.rect(0, 0, 210, 30, 'F');
+                    
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(24);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('TomaSalud', 20, 20);
+                    
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text('Reporte de Tratamiento Médico', 20, 27);
+
+                    // Información del paciente
+                    let yPos = 50;
+                    doc.setTextColor(...darkColor);
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Información del Paciente', 20, yPos);
+                    
+                    yPos += 10;
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(`Nombre: ${AppState.user.NOMBRE}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`Correo: ${AppState.user.CORREO}`, 20, yPos);
+                    if (AppState.user.TIPO_SANGRE) {
+                        yPos += 6;
+                        doc.text(`Tipo de Sangre: ${AppState.user.TIPO_SANGRE}`, 20, yPos);
+                    }
+                    if (AppState.user.ALERGIAS) {
+                        yPos += 6;
+                        const splitAllergies = doc.splitTextToSize(`Alergias: ${AppState.user.ALERGIAS}`, 170);
+                        doc.text(splitAllergies, 20, yPos);
+                        yPos += splitAllergies.length * 4;
+                    }
+                    if (AppState.user.PADECIMIENTOS) {
+                        yPos += 6;
+                        const splitConditions = doc.splitTextToSize(`Padecimientos: ${AppState.user.PADECIMIENTOS}`, 170);
+                        doc.text(splitConditions, 20, yPos);
+                        yPos += splitConditions.length * 4;
+                    }
+
+                    // Información del tratamiento
+                    yPos += 20;
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Información del Tratamiento', 20, yPos);
+                    
+                    yPos += 10;
+                    doc.setFontSize(14);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(`${treatmentComplete.NOMBRE_TRATAMIENTO}`, 20, yPos);
+                    
+                    yPos += 8;
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(`Fecha de Inicio: ${new Date(treatmentComplete.FECHA_INICIO).toLocaleDateString('es-ES')}`, 20, yPos);
+                    yPos += 6;
+                    if (treatmentComplete.FECHA_FIN) {
+                        doc.text(`Fecha de Fin: ${new Date(treatmentComplete.FECHA_FIN).toLocaleDateString('es-ES')}`, 20, yPos);
+                        yPos += 6;
+                    }
+                    doc.text(`Estado: ${treatmentComplete.ESTADO}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`Fecha de Creación: ${new Date().toLocaleDateString('es-ES')}`, 20, yPos);
+
+                    // Lista de medicamentos
+                    if (treatmentComplete.medicamentos && treatmentComplete.medicamentos.length > 0) {
+                        yPos += 20;
+                        doc.setFontSize(16);
+                        doc.setFont('helvetica', 'bold');
+                        doc.text('Medicamentos Prescritos', 20, yPos);
+
+                        yPos += 5;
+                        doc.setFontSize(10);
+                        doc.setTextColor(...grayColor);
+                        doc.text(`Total de medicamentos: ${treatmentComplete.medicamentos.length}`, 20, yPos);
+
+                        yPos += 15;
+                        treatmentComplete.medicamentos.forEach((med, index) => {
+                            // Verificar si necesitamos nueva página
+                            if (yPos > 240) {
+                                doc.addPage();
+                                yPos = 30;
+                                
+                                // Repetir header en nueva página
+                                doc.setFillColor(...primaryColor);
+                                doc.rect(0, 0, 210, 20, 'F');
+                                doc.setTextColor(255, 255, 255);
+                                doc.setFontSize(16);
+                                doc.setFont('helvetica', 'bold');
+                                doc.text('TomaSalud - Medicamentos (continuación)', 20, 14);
+                                yPos = 35;
+                            }
+
+                            // Fondo para cada medicamento
+                            doc.setFillColor(248, 250, 251); // #f8fafb
+                            doc.rect(15, yPos - 8, 180, 30, 'F');
+                            
+                            // Borde izquierdo de color
+                            doc.setFillColor(...primaryColor);
+                            doc.rect(15, yPos - 8, 3, 30, 'F');
+                            
+                            doc.setFontSize(12);
+                            doc.setFont('helvetica', 'bold');
+                            doc.setTextColor(...darkColor);
+                            doc.text(`${index + 1}. ${med.NOMBRE}`, 25, yPos);
+                            
+                            yPos += 6;
+                            doc.setFontSize(9);
+                            doc.setFont('helvetica', 'normal');
+                            doc.setTextColor(...grayColor);
+                            doc.text(`Dosis: ${med.DOSIS || 'No especificada'}`, 30, yPos);
+                            
+                            yPos += 4;
+                            doc.text(`Horario: ${this.formatTime(med.HORA)} - Cada ${med.INTERVALO} horas`, 30, yPos);
+                            
+                            if (med.OBSERVACION) {
+                                yPos += 4;
+                                const splitObs = doc.splitTextToSize(`Obs: ${med.OBSERVACION}`, 160);
+                                doc.text(splitObs, 30, yPos);
+                                yPos += splitObs.length * 4;
+                            }
+                            
+                            yPos += 15;
+                        });
+
+                        // Instrucciones generales
+                        yPos += 10;
+                        if (yPos > 240) {
+                            doc.addPage();
+                            yPos = 30;
+                        }
+                        
+                        doc.setFontSize(12);
+                        doc.setFont('helvetica', 'bold');
+                        doc.setTextColor(...darkColor);
+                        doc.text('Instrucciones Generales', 20, yPos);
+                        
+                        yPos += 8;
+                        doc.setFontSize(9);
+                        doc.setFont('helvetica', 'normal');
+                        doc.setTextColor(...grayColor);
+                        
+                        const instructions = [
+                            '• Tome los medicamentos exactamente como se prescribe',
+                            '• No omita dosis ni duplique dosis olvidadas',
+                            '• Contacte a su médico si experimenta efectos secundarios',
+                            '• Complete el tratamiento completo, incluso si se siente mejor',
+                            '• Mantenga los medicamentos en un lugar seguro y seco'
+                        ];
+                        
+                        instructions.forEach(instruction => {
+                            doc.text(instruction, 20, yPos);
+                            yPos += 5;
+                        });
+
+                    } else {
+                        yPos += 15;
+                        doc.setFontSize(12);
+                        doc.setTextColor(...grayColor);
+                        doc.text('No hay medicamentos asociados a este tratamiento.', 20, yPos);
+                    }
+
+                    // Footer en todas las páginas
+                    const pageCount = doc.internal.getNumberOfPages();
+                    for (let i = 1; i <= pageCount; i++) {
+                        doc.setPage(i);
+                        
+                        // Línea separadora
+                        doc.setDrawColor(...grayColor);
+                        doc.line(20, 280, 190, 280);
+                        
+                        doc.setFontSize(8);
+                        doc.setTextColor(...grayColor);
+                        doc.text(`Generado el ${new Date().toLocaleDateString('es-ES')} a las ${new Date().toLocaleTimeString('es-ES')}`, 20, 285);
+                        doc.text(`Página ${i} de ${pageCount}`, 170, 285);
+                        doc.text('TomaSalud - Sistema de Gestión de Tratamientos Médicos', 20, 290);
+                        
+                        // Advertencia médica
+                        doc.setTextColor(220, 20, 60); // Rojo más suave
+                        doc.text('IMPORTANTE: Este documento es solo informativo. Consulte siempre con su médico.', 20, 295);
+                    }
+
+                    // Generar nombre de archivo único
+                    const fileName = `TomaSalud_${treatmentComplete.NOMBRE_TRATAMIENTO.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+                    
+                    // Descargar el PDF
+                    doc.save(fileName);
+                    
+                    this.showAlert('PDF generado y descargado correctamente', 'success');
+
+                } catch (error) {
+                    console.error('Error generando PDF:', error);
+                    this.showAlert('Error al generar el PDF: ' + error.message, 'error');
+                }
             }
         };
 
@@ -1426,6 +1671,15 @@
                 document.getElementById('add-medication-btn').addEventListener('click', async () => {
                     await UI.loadTreatmentSelect();
                     UI.showModal('medication-modal');
+                });
+
+                // Exportar tratamiento a PDF
+                document.getElementById('export-pdf-btn').addEventListener('click', () => {
+                    if (AppState.selectedTreatment) {
+                        Utils.exportTreatmentToPDF(AppState.selectedTreatment);
+                    } else {
+                        Utils.showAlert('Selecciona un tratamiento para exportar a PDF', 'error');
+                    }
                 });
 
                 document.getElementById('logout-btn').addEventListener('click', () => {
