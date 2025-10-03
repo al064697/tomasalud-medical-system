@@ -7,6 +7,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="../assets/js/notifications.js"></script>
     <style>
         * {
             margin: 0;
@@ -816,6 +817,57 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Card de Configuración de Notificaciones -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3><i class="fas fa-bell-slash"></i> Notificaciones</h3>
+                            <div class="card-actions">
+                                <button class="btn btn-ghost btn-sm" id="test-notification-btn" title="Probar notificación">
+                                    <i class="fas fa-vial"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="card-subtitle">Configuración de alertas de medicamentos</p>
+                    </div>
+                    <div class="card-body">
+                        <div id="notification-status">
+                            <div class="empty-state pulse">
+                                <i class="fas fa-bell"></i>
+                                <h4>Verificando soporte...</h4>
+                                <p>Comprobando compatibilidad del navegador</p>
+                            </div>
+                        </div>
+                        
+                        <div id="notification-settings" style="display: none;">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <input type="checkbox" id="enable-reminders" checked>
+                                    Recordatorios 5 minutos antes
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <input type="checkbox" id="enable-alerts" checked>
+                                    Alertas en tiempo real
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <input type="checkbox" id="enable-overdue" checked>
+                                    Notificaciones de medicamentos vencidos
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-secondary btn-full" id="notification-settings-btn">
+                            <i class="fas fa-cog"></i>
+                            Configurar Notificaciones
+                        </button>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -867,50 +919,114 @@
     </div>
 
     <!-- Modal de Medicamento -->
-        <!-- Modal de Medicamento -->
     <div class="modal" id="medication-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Agregar Medicamento</h2>
-                <button class="close-button" onclick="UI.hideModal('medication-modal')">&times;</button>
+                <h3 class="modal-title">
+                    <i class="fas fa-pills"></i>
+                    Agregar Medicamento
+                </h3>
+                <button class="modal-close" type="button" onclick="UI.hideModal('medication-modal')">&times;</button>
             </div>
-            <form id="medication-form" class="form">
-                <input type="hidden" name="tratamiento_id" id="med-tratamiento-id">
-                
-                <div class="form-group">
-                    <label for="med-nombre">Nombre del Medicamento*</label>
-                    <input type="text" id="med-nombre" name="nombre" required
-                        placeholder="Ej: Paracetamol">
-                </div>
+            <div class="modal-body">
+                <form id="medication-form">
+                    <input type="hidden" name="tratamiento_id" id="med-tratamiento-id">
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="med-tratamiento">
+                            Tratamiento *
+                        </label>
+                        <select 
+                            id="med-tratamiento" 
+                            name="tratamiento" 
+                            class="form-input"
+                            required
+                        >
+                            <option value="">Seleccionar tratamiento</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="med-dosis">Dosis*</label>
-                    <input type="text" id="med-dosis" name="dosis" required
-                        placeholder="Ej: 1 tableta">
-                </div>
+                    <div class="form-group">
+                        <label class="form-label" for="med-nombre">
+                            Nombre del Medicamento *
+                        </label>
+                        <input 
+                            type="text" 
+                            id="med-nombre" 
+                            name="nombre" 
+                            class="form-input" 
+                            placeholder="Ej: Paracetamol"
+                            required
+                        >
+                    </div>
 
-                <div class="form-group">
-                    <label for="med-hora">Hora Inicial*</label>
-                    <input type="time" id="med-hora" name="hora" required>
-                </div>
+                    <div class="form-group">
+                        <label class="form-label" for="med-dosis">
+                            Dosis *
+                        </label>
+                        <input 
+                            type="text" 
+                            id="med-dosis" 
+                            name="dosis" 
+                            class="form-input" 
+                            placeholder="Ej: 150mg"
+                            required
+                        >
+                    </div>
 
-                <div class="form-group">
-                    <label for="med-intervalo">Intervalo (horas)*</label>
-                    <input type="number" id="med-intervalo" name="intervalo" required
-                        min="1" max="24" value="8">
-                </div>
+                    <div class="form-group">
+                        <label class="form-label" for="med-hora">
+                            Hora Inicial *
+                        </label>
+                        <input 
+                            type="time" 
+                            id="med-hora" 
+                            name="hora" 
+                            class="form-input" 
+                            required
+                        >
+                    </div>
 
-                <div class="form-group">
-                    <label for="med-observacion">Observaciones</label>
-                    <textarea id="med-observacion" name="observacion" rows="3"
-                        placeholder="Instrucciones adicionales o notas importantes"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label class="form-label" for="med-intervalo">
+                            Intervalo (horas) *
+                        </label>
+                        <input 
+                            type="number" 
+                            id="med-intervalo" 
+                            name="intervalo" 
+                            class="form-input"
+                            min="1" 
+                            max="24" 
+                            value="8"
+                            required
+                        >
+                    </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="UI.hideModal('medication-modal')">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label class="form-label" for="med-observacion">
+                            Observaciones
+                        </label>
+                        <textarea 
+                            id="med-observacion" 
+                            name="observacion" 
+                            class="form-textarea"
+                            placeholder="Instrucciones adicionales o notas importantes..."
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="UI.hideModal('medication-modal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -918,42 +1034,75 @@
     <div class="modal" id="alarm-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Agregar Alarma</h2>
-                <button class="close-button" onclick="UI.hideModal('alarm-modal')">&times;</button>
+                <h3 class="modal-title">
+                    <i class="fas fa-bell"></i>
+                    Agregar Alarma
+                </h3>
+                <button class="modal-close" type="button" onclick="UI.hideModal('alarm-modal')">&times;</button>
             </div>
-            <form id="alarm-form" class="form">
-                <input type="hidden" name="tratamiento_id" id="alarm-tratamiento-id">
-                
-                <div class="form-group">
-                    <label for="alarm-medicamento">Medicamento*</label>
-                    <select id="alarm-medicamento" name="medicamento_id" required>
-                        <option value="">Selecciona un medicamento</option>
-                    </select>
-                </div>
+            <div class="modal-body">
+                <form id="alarm-form">
+                    <input type="hidden" name="tratamiento_id" id="alarm-tratamiento-id">
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="alarm-medicamento">
+                            Medicamento *
+                        </label>
+                        <select 
+                            id="alarm-medicamento" 
+                            name="medicamento_id" 
+                            class="form-input"
+                            required
+                        >
+                            <option value="">Selecciona un medicamento</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="alarm-hora">Hora de la Alarma*</label>
-                    <input type="time" id="alarm-hora" name="hora" required>
-                </div>
+                    <div class="form-group">
+                        <label class="form-label" for="alarm-hora">
+                            Hora de la Alarma *
+                        </label>
+                        <input 
+                            type="time" 
+                            id="alarm-hora" 
+                            name="hora" 
+                            class="form-input"
+                            required
+                        >
+                    </div>
 
-                <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="repetir" checked>
-                        Repetir diariamente
-                    </label>
-                </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="repetir" checked>
+                            <span class="checkmark"></span>
+                            Repetir diariamente
+                        </label>
+                    </div>
 
-                <div class="form-group">
-                    <label for="alarm-descripcion">Descripción</label>
-                    <textarea id="alarm-descripcion" name="descripcion" rows="3"
-                        placeholder="Notas adicionales para esta alarma"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label class="form-label" for="alarm-descripcion">
+                            Descripción
+                        </label>
+                        <textarea 
+                            id="alarm-descripcion" 
+                            name="descripcion" 
+                            class="form-textarea"
+                            placeholder="Notas adicionales para esta alarma..."
+                            rows="3"
+                        ></textarea>
+                    </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="UI.hideModal('alarm-modal')">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="UI.hideModal('alarm-modal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -1598,7 +1747,12 @@
             },
 
             async loadTreatmentSelect() {
-                const select = document.getElementById('medication-treatment');
+                const select = document.getElementById('med-tratamiento');
+                if (!select) {
+                    console.error('No se encontró el elemento select para tratamientos');
+                    return;
+                }
+                
                 select.innerHTML = '<option value="">Seleccionar tratamiento</option>';
                 
                 AppState.treatments
@@ -1609,6 +1763,14 @@
                         option.textContent = treatment.NOMBRE_TRATAMIENTO;
                         select.appendChild(option);
                     });
+                
+                // Actualizar el campo oculto cuando se selecciona un tratamiento
+                select.addEventListener('change', (e) => {
+                    const hiddenField = document.getElementById('med-tratamiento-id');
+                    if (hiddenField) {
+                        hiddenField.value = e.target.value;
+                    }
+                });
             }
         };
 
@@ -1616,6 +1778,9 @@
         const App = {
             async init() {
                 try {
+                    // Registrar Service Worker
+                    await this.registerServiceWorker();
+                    
                     // Cargar usuario desde localStorage
                     await API.loadUserFromStorage();
                     UI.updateUserInfo();
@@ -1626,12 +1791,145 @@
                     // Configurar event listeners
                     this.setupEventListeners();
                     
+                    // Reinicializar notificaciones después de que el usuario esté logueado
+                    setTimeout(() => {
+                        if (window.notificationManager) {
+                            window.notificationManager.reinitialize();
+                        }
+                    }, 1500);
+                    
+                    // Inicializar notificaciones después de cargar datos
+                    setTimeout(() => {
+                        if (notificationManager && notificationManager.canSendNotifications()) {
+                            notificationManager.startAlarmMonitoring();
+                            Utils.showAlert('¡Sistema de notificaciones activo!', 'success');
+                        }
+                    }, 2000);
+                    
+                    // Función global para testing (disponible en consola)
+                    window.testNotifications = {
+                        checkAlarms: () => {
+                            if (window.notificationManager) {
+                                window.notificationManager.refreshAlarmCheck();
+                                console.log("🔍 Verificación manual de alarmas ejecutada");
+                            } else {
+                                console.log("❌ NotificationManager no disponible");
+                            }
+                        },
+                        getStatus: () => {
+                            if (window.notificationManager) {
+                                const status = window.notificationManager.getStatus();
+                                console.log("📊 Estado del sistema:", status);
+                                return status;
+                            }
+                            return "NotificationManager no disponible";
+                        },
+                        viewAlarms: () => {
+                            console.log("📋 Alarmas en AppState:", window.AppState?.alarms);
+                        },
+                        reinitialize: () => {
+                            if (window.notificationManager) {
+                                window.notificationManager.reinitialize();
+                                console.log("🔄 Sistema de notificaciones reinicializado manualmente");
+                            } else {
+                                console.log("❌ NotificationManager no disponible");
+                            }
+                        },
+                        testNotification: () => {
+                            if (window.notificationManager) {
+                                return window.notificationManager.sendTestNotification();
+                            } else {
+                                console.log("❌ NotificationManager no disponible");
+                                return false;
+                            }
+                        },
+                        checkServiceWorker: async () => {
+                            if ('serviceWorker' in navigator) {
+                                const registration = await navigator.serviceWorker.getRegistration();
+                                console.log("🔧 Service Worker status:", {
+                                    registered: !!registration,
+                                    active: !!registration?.active,
+                                    installing: !!registration?.installing,
+                                    waiting: !!registration?.waiting
+                                });
+                                return registration;
+                            } else {
+                                console.log("❌ Service Worker no soportado");
+                                return null;
+                            }
+                        },
+                        checkPaths: () => {
+                            console.log("🔍 === VERIFICACIÓN DE RUTAS ===");
+                            const paths = [
+                                'assets/images/favicon-32.png',
+                                'assets/images/logo-favicon.png',
+                                'sw.js'
+                            ];
+                            
+                            paths.forEach(async (path) => {
+                                try {
+                                    const response = await fetch(path);
+                                    console.log(`${response.ok ? '✅' : '❌'} ${path}: ${response.status}`);
+                                } catch (error) {
+                                    console.log(`❌ ${path}: Error - ${error.message}`);
+                                }
+                            });
+                        },
+                        diagnostics: () => {
+                            console.log("🔍 === DIAGNÓSTICO COMPLETO ===");
+                            console.log("1. Soporte de notificaciones:", 'Notification' in window);
+                            console.log("2. Permisos:", Notification.permission);
+                            console.log("3. NotificationManager:", !!window.notificationManager);
+                            console.log("4. Usuario logueado:", !!window.AppState?.user);
+                            console.log("5. Token disponible:", !!window.AppState?.token);
+                            console.log("6. Service Worker:", 'serviceWorker' in navigator);
+                            if (window.notificationManager) {
+                                console.log("7. Estado del manager:", window.notificationManager.getStatus());
+                            }
+                            console.log("================================");
+                        }
+                    };
+                    
                     Utils.showAlert('¡Bienvenido a TomaSalud!');
                 } catch (error) {
                     console.error('Error initializing app:', error);
                     Utils.showAlert('Error al inicializar la aplicación', 'error');
                     // Redireccionar al login
                     window.location.href = 'index-moderno.html';
+                }
+            },
+
+            // Registrar Service Worker para notificaciones con acciones
+            async registerServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                    try {
+                        console.log('🔧 Registrando Service Worker...');
+                        const registration = await navigator.serviceWorker.register('../sw.js');
+                        
+                        // Esperar a que esté activo
+                        if (registration.installing) {
+                            registration.installing.addEventListener('statechange', (e) => {
+                                if (e.target.state === 'activated') {
+                                    console.log('✅ Service Worker activo - acciones de notificación disponibles');
+                                    // Habilitar acciones en notifications.js
+                                    if (window.notificationManager) {
+                                        window.notificationManager.serviceWorkerReady = true;
+                                    }
+                                }
+                            });
+                        } else if (registration.active) {
+                            console.log('✅ Service Worker ya está activo');
+                            if (window.notificationManager) {
+                                window.notificationManager.serviceWorkerReady = true;
+                            }
+                        }
+                        
+                        console.log('📱 Service Worker registrado exitosamente');
+                    } catch (error) {
+                        console.warn('⚠️ Error al registrar Service Worker:', error);
+                    }
+                } else {
+                    console.warn('⚠️ Service Worker no soportado en este navegador');
                 }
             },
 
@@ -1652,6 +1950,13 @@
                     UI.renderTreatments();
                     UI.renderMedications();
                     UI.renderAlarms();
+                    
+                    // Refrescar verificación de alarmas después de cargar datos
+                    if (window.notificationManager && window.notificationManager.canSendNotifications()) {
+                        setTimeout(() => {
+                            window.notificationManager.refreshAlarmCheck();
+                        }, 500);
+                    }
                 } catch (error) {
                     console.error('Error loading data:', error);
                     Utils.showAlert('Error al cargar los datos', 'error');
@@ -1823,9 +2128,25 @@
                             await API.updateMedication(editId, data);
                             Utils.showAlert('Medicamento actualizado exitosamente');
                             delete e.target.dataset.editId;
+                            
+                            // Refrescar verificación de alarmas después de actualizar medicamento
+                            if (window.notificationManager && window.notificationManager.canSendNotifications()) {
+                                setTimeout(() => {
+                                    window.notificationManager.refreshAlarmCheck();
+                                    console.log("🔄 Alarmas actualizadas para medicamento modificado");
+                                }, 1000);
+                            }
                         } else {
                             await API.createMedication(data);
                             Utils.showAlert('Medicamento agregado exitosamente');
+                            
+                            // Refrescar verificación de alarmas después de agregar medicamento
+                            if (window.notificationManager && window.notificationManager.canSendNotifications()) {
+                                setTimeout(() => {
+                                    window.notificationManager.refreshAlarmCheck();
+                                    console.log("🔄 Alarmas actualizadas para nuevo medicamento");
+                                }, 1000);
+                            }
                         }
                         
                         UI.hideModal('medication-modal');
@@ -1833,6 +2154,73 @@
                         await this.loadData();
                     } catch (error) {
                         Utils.showAlert('Error al procesar el medicamento', 'error');
+                    }
+                });
+
+                // Configurar notificaciones
+                this.setupNotifications();
+            },
+
+            // Funciones para notificaciones
+            setupNotifications() {
+                // Event listener para activar notificaciones
+                const settingsBtn = document.getElementById('notification-settings-btn');
+                if (settingsBtn) {
+                    settingsBtn.addEventListener('click', async () => {
+                        if (notificationManager && notificationManager.canSendNotifications()) {
+                            // Mostrar configuraciones
+                            const settings = document.getElementById('notification-settings');
+                            settings.style.display = settings.style.display === 'none' ? 'block' : 'none';
+                        } else {
+                            // Solicitar permisos
+                            try {
+                                const granted = await notificationManager.requestPermission();
+                                if (granted) {
+                                    Utils.showAlert('¡Notificaciones activadas! Recibirás avisos de tus medicamentos.', 'success');
+                                } else {
+                                    Utils.showAlert('Notificaciones denegadas. Puedes activarlas desde la configuración del navegador.', 'error');
+                                }
+                            } catch (error) {
+                                Utils.showAlert('Error al activar notificaciones: ' + error.message, 'error');
+                            }
+                        }
+                    });
+                }
+
+                // Event listener para probar notificación
+                const testBtn = document.getElementById('test-notification-btn');
+                if (testBtn) {
+                    testBtn.addEventListener('click', () => {
+                        if (notificationManager && notificationManager.canSendNotifications()) {
+                            try {
+                                notificationManager.sendTestNotification();
+                                Utils.showAlert('Notificación de prueba enviada!', 'success');
+                            } catch (error) {
+                                Utils.showAlert('Error: ' + error.message, 'error');
+                            }
+                        } else {
+                            Utils.showAlert('Primero debes activar las notificaciones', 'error');
+                        }
+                    });
+                }
+
+                // Configurar checkboxes de configuración
+                ['enable-reminders', 'enable-alerts', 'enable-overdue'].forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.addEventListener('change', (e) => {
+                            const setting = id.replace('enable-', '');
+                            if (notificationManager) {
+                                notificationManager.updateSetting(setting, e.target.checked);
+                            }
+                            console.log(`Configuración ${setting}: ${e.target.checked}`);
+                        });
+
+                        // Cargar configuración guardada
+                        if (notificationManager && notificationManager.settings) {
+                            const setting = id.replace('enable-', '');
+                            checkbox.checked = notificationManager.settings[setting] !== false;
+                        }
                     }
                 });
             },
