@@ -1,12 +1,855 @@
-# 💊 TomaSalud - Sistema Completo de Gestión de Tratamientos Médicos# 🏥 TomaSalud - Sistema de Gestión de Tratamientos Médicos
+# 💊 TomaSalud - Sistema Completo de Gestión de Tratamientos Médicos
 
+<div align="center">
 
+![TomaSalud Logo](frontend/assets/images/logo.png)
 
-Sistema web completo para la gestión integral de tratamientos médicos, medicamentos y recordatorios automáticos con arquitectura FastAPI + JavaScript vanilla.## 📋 Descripción
+**Sistema web completo para la gestión integral de tratamientos médicos, medicamentos y recordatorios automáticos con arquitectura FastAPI + JavaScript vanilla.**
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-red.svg)](https://www.sqlalchemy.org/)
 
+[🚀 Demo en Vivo](https://tomasalud.vercel.app) • [📚 Documentación API](http://localhost:8000/docs) • [🐛 Reportar Bug](https://github.com/al064697/tomasalud-medical-system/issues) • [✨ Solicitar Feature](https://github.com/al064697/tomasalud-medical-system/issues/new)
 
-## 🚀 CaracterísticasTomaSalud es una aplicación web completa para la gestión de tratamientos médicos y alarmas de medicamentos. Permite a los usuarios registrar sus tratamientos, configurar alarmas para medicamentos y llevar un seguimiento completo de su salud.
+</div>
+
+---
+
+## 📋 Descripción
+
+TomaSalud es una aplicación web completa para la gestión de tratamientos médicos y alarmas de medicamentos. Permite a los usuarios registrar sus tratamientos, configurar alarmas para medicamentos y llevar un seguimiento completo de su salud con una interfaz moderna y funcional.
+
+### 🎯 **Propósito Principal**
+Facilitar el seguimiento y cumplimiento de tratamientos médicos mediante un sistema automatizado de recordatorios y gestión integral de medicamentos.
+
+---
+
+## 🚀 Características Principales
+
+### 🔐 **Sistema de Autenticación y Usuarios**
+- ✅ **Registro completo de usuarios** - Formulario con datos médicos personales
+- ✅ **Autenticación con sesiones** - Login seguro con validación de credenciales
+- ✅ **Perfiles médicos detallados** - Información de salud, alergias y padecimientos
+- ✅ **Gestión de datos personales** - Tipo de sangre, fecha de nacimiento, donador de órganos
+- ✅ **Validación de formularios** - Sanitización y validación en frontend y backend
+
+### 🏥 **Gestión de Tratamientos Médicos**
+- ✅ **CRUD completo de tratamientos** - Crear, leer, actualizar y eliminar tratamientos
+- ✅ **Planificación temporal** - Fechas de inicio y fin de tratamientos
+- ✅ **Estados de tratamiento** - Activo, pausado, completado, cancelado
+- ✅ **Asociación por usuario** - Cada usuario gestiona sus propios tratamientos
+- ✅ **Historial completo** - Registro de todos los cambios y modificaciones
+
+### 💊 **Sistema de Medicamentos**
+- ✅ **Gestión completa de medicamentos** - Nombre, dosis, horarios e intervalos
+- ✅ **Horarios personalizados** - Configuración flexible de tomas diarias
+- ✅ **Intervalos automáticos** - Cada 4, 6, 8, 12 o 24 horas
+- ✅ **Observaciones médicas** - Notas especiales por medicamento
+- ✅ **Vinculación a tratamientos** - Cada medicamento pertenece a un tratamiento específico
+- ✅ **Generación automática de alarmas** - Creación automática de recordatorios
+
+### 🔔 **Sistema de Alarmas Inteligente**
+- ✅ **Generación automática** - Alarmas creadas automáticamente al agregar medicamentos
+- ✅ **Recordatorios personalizados** - Horarios específicos por medicamento
+- ✅ **Estados dinámicos** - Pendiente, tomada, vencida, aplazada
+- ✅ **Aplazamiento inteligente** - 5, 10, 15, 30 minutos o 1 hora
+- ✅ **Registro de cumplimiento** - Seguimiento completo de tomas de medicamentos
+- ✅ **Notificaciones visuales** - Indicadores de estado con colores específicos
+
+### 📊 **Dashboard y Reportes**
+- ✅ **Panel de control interactivo** - Resumen visual de estado general
+- ✅ **Exportación a PDF** - Reportes médicos profesionales con jsPDF
+- ✅ **Estadísticas en tiempo real** - Tratamientos activos, medicamentos pendientes
+- ✅ **Próximas alarmas** - Vista de recordatorios más cercanos
+- ✅ **Historial de cumplimiento** - Registro de medicamentos tomados correctamente
+- ✅ **Navegación intuitiva** - Acceso rápido a todas las funcionalidades
+
+### 🌙 **Modo Oscuro**
+- ✅ **Toggle dinámico** - Cambio entre tema claro y oscuro
+- ✅ **Persistencia de preferencias** - Guardado en localStorage
+- ✅ **Transiciones suaves** - Animaciones elegantes entre temas
+- ✅ **Variables CSS optimizadas** - Paleta de colores completa para ambos modos
+
+---
+
+## 🛠️ Tecnologías
+
+### 🔧 **Backend Stack**
+- **[FastAPI](https://fastapi.tiangolo.com/)** - Framework web moderno y de alto rendimiento
+- **[SQLAlchemy](https://www.sqlalchemy.org/)** - ORM avanzado para gestión de base de datos
+- **[SQLite](https://sqlite.org/)** - Base de datos liviana y eficiente (configurable para PostgreSQL/MySQL)
+- **[Pydantic](https://pydantic.dev/)** - Validación robusta de datos y serialización
+- **[Uvicorn](https://www.uvicorn.org/)** - Servidor ASGI de producción
+- **[bcrypt](https://pypi.org/project/bcrypt/)** - Hashing seguro de contraseñas
+
+### 🎨 **Frontend Stack**
+- **HTML5 semántico** - Estructura accesible y bien organizada
+- **CSS3 moderno** - Variables CSS, flexbox, grid y responsive design
+- **JavaScript ES6+** - Código modular y funcional sin dependencias
+- **[Font Awesome 6.4.0](https://fontawesome.com/)** - Iconografía consistente y atractiva
+- **[Inter Font](https://rsms.me/inter/)** - Tipografía optimizada para interfaces
+- **[jsPDF 2.5.1](https://github.com/parallax/jsPDF)** - Generación de PDFs en el cliente
+
+---
+
+## 📁 Estructura del Proyecto
+
+```
+TomaSalud/
+├── 📁 backend/                    # 🔧 Servidor API FastAPI
+│   ├── 📁 app/
+│   │   ├── 📁 models/            # 🗂️ Modelos SQLAlchemy
+│   │   │   ├── alarma.py
+│   │   │   ├── historial.py
+│   │   │   ├── medicamento.py
+│   │   │   ├── tratamiento.py
+│   │   │   └── usuario.py
+│   │   ├── 📁 routes/            # 🛤️ Endpoints REST
+│   │   │   ├── alarma.py
+│   │   │   ├── auth.py
+│   │   │   ├── historial.py
+│   │   │   ├── medicamento.py
+│   │   │   ├── tratamiento.py
+│   │   │   └── usuario.py
+│   │   ├── 📁 schemas/           # ✅ Validación Pydantic
+│   │   │   ├── alarma.py
+│   │   │   ├── auth.py
+│   │   │   ├── historial.py
+│   │   │   ├── medicamento.py
+│   │   │   ├── tratamiento.py
+│   │   │   └── usuario.py
+│   │   ├── 📁 services/          # 🔧 Lógica de negocio
+│   │   │   └── alarma_service.py
+│   │   ├── auth.py               # 🔐 Autenticación y autorización
+│   │   ├── config.py             # ⚙️ Configuración de la aplicación
+│   │   ├── database.py           # 🗄️ Configuración de base de datos
+│   │   └── main.py               # 🚀 Punto de entrada de la aplicación
+│   ├── 📁 scripts/               # 📋 Scripts de base de datos
+│   │   ├── schema.sql
+│   │   └── TRATAMIENTOS.sql
+│   ├── tratamientos.db           # 🗄️ Base de datos SQLite
+│   └── requirements.txt          # 📦 Dependencias de Python
+│
+├── 📁 frontend/                   # 🎨 Interfaz de usuario
+│   ├── 📁 assets/
+│   │   ├── 📁 css/               # 🎨 Hojas de estilo
+│   │   │   ├── dashboard.css
+│   │   │   └── style.css
+│   │   ├── 📁 js/                # ⚡ Scripts JavaScript
+│   │   │   ├── alarmas.js
+│   │   │   ├── config.js
+│   │   │   ├── dashboard.js
+│   │   │   ├── medicamentos.js
+│   │   │   ├── notifications.js
+│   │   │   └── tratamientos.js
+│   │   └── 📁 images/            # 🖼️ Recursos gráficos
+│   │       ├── favicon.ico
+│   │       ├── logo.png
+│   │       └── usuario.png
+│   ├── 📁 pages/                 # 📄 Páginas modernas
+│   │   ├── dashboard-moderno.html
+│   │   ├── index-moderno.html
+│   │   ├── registro-moderno.html
+│   │   └── configuracion-moderno.html
+│   ├── 📁 test/                  # 🧪 Archivos de prueba
+│   ├── alarmas.html              # ⏰ Gestión de alarmas
+│   ├── dashboard.html            # 📊 Panel principal
+│   ├── index.html                # 🔐 Página de login
+│   ├── registro.html             # ✏️ Registro de usuarios
+│   ├── favicon.ico               # 🔖 Icono de la aplicación
+│   └── sw.js                     # 🔧 Service Worker
+│
+├── 📁 Design/                     # 🎨 Diseños y mockups
+│   ├── Frame 1.png
+│   ├── Frame 2.png
+│   ├── Frame 3.png
+│   └── Frame 4.png
+│
+├── 📁 docs/                       # 📚 Documentación adicional
+│   ├── ESTRUCTURA_PROYECTO.md
+│   ├── FUNCIONALIDAD_PDF.md
+│   └── SISTEMA_FUNCIONANDO.md
+│
+├── README.md                      # 📖 Este archivo
+├── LICENSE                        # ⚖️ Licencia MIT
+├── package.json                   # 📦 Metadata del proyecto
+├── vercel.json                    # ☁️ Configuración de despliegue
+└── .gitignore                     # 🚫 Archivos ignorados por Git
+```
+
+---
+
+## 🚀 Instalación y Configuración
+
+### 📋 **Prerrequisitos del Sistema**
+- **Python 3.8+** (Recomendado: Python 3.9 o superior)
+- **pip** (administrador de paquetes de Python)
+- **Git** (para clonar el repositorio)
+
+### 💻 **Verificar Prerrequisitos**
+
+#### **macOS:**
+```bash
+# Verificar Python
+python3 --version
+
+# Verificar pip
+pip3 --version
+
+# Verificar Git
+git --version
+```
+
+#### **Windows:**
+```cmd
+# Verificar Python
+python --version
+
+# Verificar pip
+pip --version
+
+# Verificar Git
+git --version
+```
+
+### 🔧 **Instalación Paso a Paso**
+
+#### **1. Clonar el repositorio**
+
+**macOS/Linux:**
+```bash
+git clone https://github.com/al064697/tomasalud-medical-system.git
+cd tomasalud-medical-system
+```
+
+**Windows:**
+```cmd
+git clone https://github.com/al064697/tomasalud-medical-system.git
+cd tomasalud-medical-system
+```
+
+#### **2. Crear y activar entorno virtual**
+
+**macOS:**
+```bash
+# Crear entorno virtual
+python3 -m venv .venv
+
+# Activar entorno virtual
+source .venv/bin/activate
+
+# Verificar activación
+which python
+```
+
+**Windows (Command Prompt):**
+```cmd
+# Crear entorno virtual
+python -m venv .venv
+
+# Activar entorno virtual
+.venv\Scripts\activate.bat
+
+# Verificar activación
+where python
+```
+
+**Windows (PowerShell):**
+```powershell
+# Crear entorno virtual
+python -m venv .venv
+
+# Activar entorno virtual
+.venv\Scripts\Activate.ps1
+
+# Si hay error de ejecución de scripts:
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+#### **3. Instalar dependencias del backend**
+
+```bash
+# Navegar al directorio backend
+cd backend
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Verificar instalación
+python3 -c "import fastapi; print('FastAPI instalado correctamente')"
+```
+
+#### **4. Ejecutar el servidor backend**
+
+```bash
+# Desde el directorio backend
+python3 -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+# Salida esperada:
+# INFO: Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+# INFO: Started reloader process [PID] using StatReload
+# INFO: Started server process [PID]
+# INFO: Application startup complete.
+```
+
+#### **5. Ejecutar el servidor frontend**
+
+```bash
+# En una nueva terminal, navegar al directorio frontend
+cd frontend
+
+# Ejecutar servidor HTTP de Python
+python3 -m http.server 3000
+
+# Salida esperada:
+# Serving HTTP on :: port 3000 (http://[::]:3000/) ...
+```
+
+---
+
+## 🌐 Acceso a la Aplicación
+
+### **🔗 URLs Principales**
+- **🏠 Frontend Principal**: http://localhost:3000
+- **🚀 API Backend**: http://localhost:8000
+- **📚 Documentación API**: http://localhost:8000/docs
+- **🔧 API Interactiva**: http://localhost:8000/redoc
+
+### **📄 Páginas del Frontend**
+- **📋 Página Principal**: http://localhost:3000/index.html (Login)
+- **✏️ Registro**: http://localhost:3000/registro.html
+- **🏥 Dashboard**: http://localhost:3000/dashboard.html
+- **⏰ Alarmas**: http://localhost:3000/alarmas.html
+- **💊 Dashboard Moderno**: http://localhost:3000/pages/dashboard-moderno.html
+
+---
+
+## 📡 API REST - Endpoints Disponibles
+
+### 🔐 **Autenticación y Usuarios**
+
+#### **Públicos (sin autenticación requerida)**
+```http
+POST /auth/login          # Iniciar sesión de usuario
+POST /auth/registro       # Registrar nuevo usuario
+```
+
+#### **Protegidos (requieren autenticación)**
+```http
+GET  /usuarios            # Listar usuarios del sistema
+POST /usuarios            # Crear nuevo usuario
+GET  /usuarios/{id}       # Obtener usuario específico
+PUT  /usuarios/{id}       # Actualizar datos de usuario
+```
+
+### 🏥 **Gestión de Tratamientos**
+```http
+GET  /tratamientos                     # Listar tratamientos
+POST /tratamientos                     # Crear nuevo tratamiento
+GET  /tratamientos/{id}                # Obtener tratamiento específico
+PUT  /tratamientos/{id}                # Actualizar tratamiento
+DELETE /tratamientos/{id}              # Eliminar tratamiento
+GET  /tratamientos/{id}/completo       # Obtener tratamiento con medicamentos (para PDF)
+```
+
+### 💊 **Gestión de Medicamentos**
+```http
+GET  /medicamentos                     # Listar medicamentos
+POST /medicamentos                     # Crear nuevo medicamento
+GET  /medicamentos/{id}                # Obtener medicamento específico
+PUT  /medicamentos/{id}                # Actualizar medicamento
+DELETE /medicamentos/{id}              # Eliminar medicamento
+```
+
+### 🔔 **Sistema de Alarmas**
+```http
+GET  /alarmas                          # Listar alarmas
+POST /alarmas                          # Crear nueva alarma
+GET  /alarmas/{id}                     # Obtener alarma específica
+PUT  /alarmas/{id}                     # Actualizar alarma (marcar como tomada)
+DELETE /alarmas/{id}                   # Eliminar alarma
+```
+
+### 📊 **Historial Médico**
+```http
+GET  /historiales                      # Listar historial médico
+POST /historiales                      # Crear entrada en historial
+GET  /historiales/{id}                 # Obtener entrada específica
+```
+
+### 📋 **Ejemplos de Uso de la API**
+
+#### **Login de Usuario**
+```bash
+curl -X POST "http://localhost:8000/auth/login" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "correo": "usuario@example.com",
+       "contrasena": "password123"
+     }'
+```
+
+#### **Crear Tratamiento**
+```bash
+curl -X POST "http://localhost:8000/tratamientos" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "ID_USUARIO": 1,
+       "NOMBRE_TRATAMIENTO": "Tratamiento Antibiótico",
+       "FECHA_INICIO": "2025-01-01",
+       "FECHA_FIN": "2025-01-10",
+       "ESTADO": "ACTIVO"
+     }'
+```
+
+#### **Agregar Medicamento**
+```bash
+curl -X POST "http://localhost:8000/medicamentos" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "ID_TRATAMIENTO": 1,
+       "NOMBRE": "Amoxicilina",
+       "DOSIS": "500mg",
+       "HORA": "08:00:00",
+       "INTERVALO": 8,
+       "OBSERVACION": "Tomar con alimentos"
+     }'
+```
+
+---
+
+## 🗄️ Esquema de Base de Datos
+
+### **Tablas Principales**
+
+#### **USUARIO**
+```sql
+ID_USUARIO          INTEGER PRIMARY KEY
+NOMBRE              TEXT NOT NULL
+CORREO              TEXT UNIQUE NOT NULL
+CONTRASENA_HASH     TEXT NOT NULL
+SEXO                BOOLEAN
+FECHA_NACIMIENTO    DATE
+TIPO_SANGRE         TEXT
+ALERGIAS            TEXT
+PADECIMIENTOS       TEXT
+DONADOR_ORGANOS     BOOLEAN
+ROL                 TEXT DEFAULT 'USUARIO'
+FECHA_REGISTRO      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+```
+
+#### **TRATAMIENTO**
+```sql
+ID_TRATAMIENTO      INTEGER PRIMARY KEY
+ID_USUARIO          INTEGER REFERENCES USUARIO(ID_USUARIO)
+NOMBRE_TRATAMIENTO  TEXT NOT NULL
+FECHA_INICIO        DATE NOT NULL
+FECHA_FIN           DATE
+ESTADO              TEXT DEFAULT 'ACTIVO'
+FECHA_CREACION      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+```
+
+#### **MEDICAMENTO**
+```sql
+ID_MEDICAMENTO      INTEGER PRIMARY KEY
+ID_TRATAMIENTO      INTEGER REFERENCES TRATAMIENTO(ID_TRATAMIENTO)
+NOMBRE              TEXT NOT NULL
+DOSIS               TEXT
+HORA                TIME NOT NULL
+OBSERVACION         TEXT
+INTERVALO           INTEGER NOT NULL
+FECHA_CREACION      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+```
+
+#### **ALARMA**
+```sql
+ID_ALARMA           INTEGER PRIMARY KEY
+ID_MEDICAMENTO      INTEGER REFERENCES MEDICAMENTO(ID_MEDICAMENTO)
+FECHA_HORA          DATETIME NOT NULL
+ESTADO              TEXT DEFAULT 'PENDIENTE'
+OBSERVACIONES       TEXT
+```
+
+#### **HISTORIAL**
+```sql
+ID_HISTORIAL        INTEGER PRIMARY KEY
+ID_USUARIO          INTEGER REFERENCES USUARIO(ID_USUARIO)
+ID_MEDICAMENTO      INTEGER REFERENCES MEDICAMENTO(ID_MEDICAMENTO)
+FECHA_TOMA          DATETIME NOT NULL
+OBSERVACIONES       TEXT
+```
+
+---
+
+## 🎨 Características del Frontend
+
+### **🎯 Diseño y UX/UI**
+- **🎨 Diseño Moderno** - Interfaz limpia y profesional con design system consistente
+- **📱 Responsive Design** - Adaptable a móviles, tablets y escritorio
+- **♿ Accesibilidad WCAG** - Navegación por teclado y compatibilidad con lectores de pantalla
+- **🌙 Modo Oscuro** - Toggle dinámico con persistencia de preferencias
+- **⚡ Micro-interacciones** - Hover effects, transiciones suaves y animaciones elegantes
+
+### **🔔 Sistema de Notificaciones**
+- **📢 Web Notifications API** - Notificaciones nativas del navegador
+- **⏰ Recordatorios Inteligentes** - 5 minutos antes de la toma
+- **🚨 Alertas en Tiempo Real** - Notificación exacta a la hora programada
+- **⚠️ Medicamentos Vencidos** - Alertas para dosis perdidas
+- **🔧 Service Worker Ready** - Preparado para notificaciones avanzadas
+
+### **📊 Dashboard Interactivo**
+- **📈 Estadísticas en Tiempo Real** - Contadores de tratamientos, medicamentos y alarmas
+- **🃏 Sistema de Cards** - Información organizada en módulos
+- **🎯 Estados Visuales** - Indicadores de color para diferentes estados
+- **📋 Navegación Intuitiva** - Sidebar fijo con acceso rápido a todas las secciones
+
+### **📄 Exportación de Reportes**
+- **📋 PDF Profesional** - Reportes médicos con jsPDF 2.5.1
+- **🏥 Branding Médico** - Header con logo y información corporativa
+- **📊 Información Completa** - Datos del paciente, tratamiento y medicamentos
+- **📋 Instrucciones Médicas** - Guías generales y disclaimer profesional
+
+---
+
+## 🔐 Seguridad y Mejores Prácticas
+
+### **🛡️ Autenticación y Autorización**
+- **🔒 Hash de Contraseñas** - bcrypt con salt automático
+- **🍪 Sesiones Seguras** - Manejo de sesiones con cookies HTTPOnly
+- **✅ Validación Robusta** - Pydantic en backend, validación JS en frontend
+- **🚫 Sanitización de Inputs** - Prevención de inyección SQL y XSS
+
+### **🌐 CORS y Configuración**
+- **🔗 CORS Configurado** - Permitir comunicación frontend-backend
+- **⚙️ Variables de Entorno** - Configuración separada para desarrollo/producción
+- **📝 Logging Detallado** - Registro de eventos y errores para debugging
+
+---
+
+## 🚀 Despliegue en Producción
+
+### **☁️ Opciones de Despliegue**
+
+#### **Backend (API)**
+- **[Heroku](https://heroku.com/)** - Despliegue fácil con Git
+- **[Railway](https://railway.app/)** - Moderno y simple
+- **[Render](https://render.com/)** - Gratis con SSL automático
+- **[AWS Lambda](https://aws.amazon.com/lambda/)** - Serverless escalable
+
+#### **Frontend**
+- **[Vercel](https://vercel.com/)** - Optimizado para frontend estático
+- **[Netlify](https://netlify.com/)** - Deploy automático desde Git
+- **[GitHub Pages](https://pages.github.com/)** - Gratis para repositorios públicos
+- **[AWS S3 + CloudFront](https://aws.amazon.com/s3/)** - CDN global
+
+### **🔧 Variables de Entorno**
+
+#### **Desarrollo**
+```bash
+DEBUG=True
+DATABASE_URL=sqlite:///./tratamientos.db
+CORS_ORIGINS=["http://localhost:3000"]
+```
+
+#### **Producción**
+```bash
+DEBUG=False
+DATABASE_URL=postgresql://user:pass@host:port/database
+SECRET_KEY=your-super-secure-secret-key
+CORS_ORIGINS=["https://your-domain.com"]
+```
+
+### **🐳 Docker (Opcional)**
+
+**Dockerfile para Backend:**
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+**docker-compose.yml:**
+```yaml
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./tratamientos.db
+    volumes:
+      - ./backend/tratamientos.db:/app/tratamientos.db
+
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+```
+
+---
+
+## 🧪 Testing y Desarrollo
+
+### **🔍 Pruebas Backend**
+```bash
+cd backend
+pip install pytest pytest-asyncio
+pytest tests/ -v
+```
+
+### **🌐 Pruebas Frontend**
+```bash
+cd frontend/test
+# Abrir archivos test-*.html en el navegador
+python3 -m http.server 8080
+```
+
+### **📊 Linting y Formato**
+```bash
+# Python
+pip install black flake8
+black backend/app/
+flake8 backend/app/
+
+# JavaScript
+npm install -g eslint prettier
+eslint frontend/assets/js/
+prettier --write frontend/assets/js/
+```
+
+---
+
+## 🆘 Troubleshooting
+
+### **❌ Problemas Comunes**
+
+#### **CORS Error**
+```bash
+# Verificar que el backend esté ejecutándose en puerto 8000
+# Verificar configuración CORS en backend/app/main.py
+```
+
+#### **Error de Base de Datos**
+```bash
+# Eliminar base de datos corrupta
+rm backend/tratamientos.db
+
+# Ejecutar el backend para recrear automáticamente
+cd backend
+python3 -m uvicorn app.main:app --reload
+```
+
+#### **Puerto Ocupado**
+```bash
+# Backend en puerto alternativo
+uvicorn app.main:app --port 8001
+
+# Frontend en puerto alternativo
+python3 -m http.server 3001
+```
+
+#### **Problemas de Permisos en Windows**
+```powershell
+# Habilitar ejecución de scripts
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+### **📞 Obtener Ayuda**
+1. **📚 Revisar la documentación** en `/docs`
+2. **🔍 Buscar en issues existentes** en GitHub
+3. **🐛 Crear un nuevo issue** con detalles del problema
+4. **💬 Contactar al desarrollador** via GitHub
+
+---
+
+## 🤝 Contribuir al Proyecto
+
+### **🚀 Cómo Contribuir**
+
+1. **🍴 Fork** el repositorio
+2. **🌿 Crear** una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. **✅ Agregar** tus cambios siguiendo los estándares de código
+4. **🧪 Probar** tu código localmente
+5. **💾 Commit** tus cambios (`git commit -m 'Add some AmazingFeature'`)
+6. **📤 Push** a la rama (`git push origin feature/AmazingFeature`)
+7. **🔃 Abrir** un Pull Request
+
+### **📏 Estándares de Código**
+
+#### **Python (Backend)**
+```python
+# Ejemplo de función bien documentada
+def crear_alarma(medicamento_id: int, fecha: datetime, hora: time) -> Alarma:
+    """
+    Crea una nueva alarma para un medicamento específico.
+    
+    Args:
+        medicamento_id: ID del medicamento
+        fecha: Fecha de la alarma
+        hora: Hora de la alarma
+        
+    Returns:
+        Alarma: Objeto alarma creado
+        
+    Raises:
+        ValueError: Si el medicamento no existe
+    """
+    # Implementación...
+```
+
+#### **JavaScript (Frontend)**
+```javascript
+// Ejemplo de función moderna
+const cargarAlarmas = async (usuarioId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/alarmas/?usuario_id=${usuarioId}`);
+    const alarmas = await response.json();
+    return alarmas;
+  } catch (error) {
+    console.error('Error cargando alarmas:', error);
+    throw error;
+  }
+};
+```
+
+### **🏷️ Tipos de Contribuciones**
+- 🐛 **Corrección de bugs**
+- ✨ **Nuevas funcionalidades**
+- 📚 **Mejoras en documentación**
+- 🎨 **Mejoras en UI/UX**
+- 🔧 **Optimizaciones de rendimiento**
+- 🧪 **Pruebas unitarias**
+- 🌐 **Traducciones**
+
+---
+
+## 📈 Roadmap y Futuras Mejoras
+
+### **🔮 Próximas Características**
+- [ ] **🔔 Notificaciones Push** - PWA con service workers avanzados
+- [ ] **📱 App Móvil** - React Native o Flutter
+- [ ] **📊 Dashboard de Métricas** - Analytics avanzados de adherencia
+- [ ] **🤖 IA para Recordatorios** - Machine learning para optimizar horarios
+- [ ] **🌐 API Médica** - Integración con sistemas de salud
+- [ ] **📧 Recordatorios SMS/Email** - Múltiples canales de notificación
+- [ ] **🔗 Sync Multi-dispositivo** - Sincronización en tiempo real
+- [ ] **📋 Reportes Avanzados** - Gráficos y análisis temporal
+
+### **🛠️ Mejoras Técnicas**
+- [ ] **🐳 Containerización** - Docker y Kubernetes
+- [ ] **🧪 Test Coverage** - 90%+ de cobertura de pruebas
+- [ ] **⚡ Performance** - Caching y optimizaciones
+- [ ] **🔒 Security Audit** - Pentesting y auditoría de seguridad
+- [ ] **📊 Monitoring** - Logging avanzado y métricas
+- [ ] **🌍 Internacionalización** - Soporte multi-idioma
+
+---
+
+## 📄 Licencia
+
+Este proyecto está licenciado bajo la **Licencia MIT** - ver el archivo [LICENSE](LICENSE) para más detalles.
+
+### **🎯 Resumen de la Licencia MIT**
+- ✅ **Uso comercial** permitido
+- ✅ **Modificación** permitida
+- ✅ **Distribución** permitida
+- ✅ **Uso privado** permitido
+- ❌ **Sin garantía** - uso bajo tu propio riesgo
+- ❌ **Sin responsabilidad** del autor
+
+---
+
+## 👥 Autores y Reconocimientos
+
+### **👨‍💻 Desarrollador Principal**
+- **[Sebastian Eligio Rios Fuentes](https://github.com/al064697)** - Creador y mantenedor principal
+  - 📧 Email: sebastian.eligio@example.com
+  - 🐙 GitHub: [@al064697](https://github.com/al064697)
+
+### **🙏 Agradecimientos**
+- **FastAPI Team** - Por el excelente framework
+- **SQLAlchemy Team** - Por el ORM robusto
+- **Font Awesome** - Por los iconos
+- **Inter Font** - Por la tipografía
+- **Comunidad Open Source** - Por las librerías y herramientas
+
+---
+
+## 📊 Estadísticas del Proyecto
+
+<div align="center">
+
+![GitHub repo size](https://img.shields.io/github/repo-size/al064697/tomasalud-medical-system)
+![GitHub language count](https://img.shields.io/github/languages/count/al064697/tomasalud-medical-system)
+![GitHub top language](https://img.shields.io/github/languages/top/al064697/tomasalud-medical-system)
+![GitHub last commit](https://img.shields.io/github/last-commit/al064697/tomasalud-medical-system)
+![GitHub issues](https://img.shields.io/github/issues/al064697/tomasalud-medical-system)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/al064697/tomasalud-medical-system)
+
+</div>
+
+---
+
+## 📞 Soporte y Contacto
+
+### **🆘 ¿Necesitas Ayuda?**
+
+#### **📚 Recursos de Documentación**
+- **📖 Wiki del Proyecto**: [GitHub Wiki](https://github.com/al064697/tomasalud-medical-system/wiki)
+- **📋 FAQ**: Preguntas frecuentes en la documentación
+- **🎥 Tutoriales**: Videos explicativos (próximamente)
+
+#### **🐛 Reportar Problemas**
+- **🔍 Buscar issues existentes**: [Issues](https://github.com/al064697/tomasalud-medical-system/issues)
+- **🆕 Crear nuevo issue**: [Nuevo Issue](https://github.com/al064697/tomasalud-medical-system/issues/new)
+- **🔒 Reportar vulnerabilidad**: Contacto directo por email
+
+#### **💬 Comunidad**
+- **📧 Email**: sebastian.eligio@example.com
+- **🐙 GitHub Discussions**: [Discusiones](https://github.com/al064697/tomasalud-medical-system/discussions)
+- **💼 LinkedIn**: [Sebastian Eligio](https://linkedin.com/in/sebastian-eligio)
+
+---
+
+<div align="center">
+
+## 🎉 ¡Gracias por usar TomaSalud!
+
+**💊 Ayudando a mejorar la adherencia a tratamientos médicos, una notificación a la vez.**
+
+### ⭐ Si este proyecto te resulta útil, ¡no olvides darle una estrella en GitHub!
+
+[![Star History Chart](https://api.star-history.com/svg?repos=al064697/tomasalud-medical-system&type=Date)](https://star-history.com/#al064697/tomasalud-medical-system&Date)
+
+---
+
+### 🔗 Links Rápidos
+
+[🏠 Inicio](https://github.com/al064697/tomasalud-medical-system) • 
+[📚 Documentación](https://github.com/al064697/tomasalud-medical-system/wiki) • 
+[🐛 Issues](https://github.com/al064697/tomasalud-medical-system/issues) • 
+[🔃 Pull Requests](https://github.com/al064697/tomasalud-medical-system/pulls) • 
+[📋 Proyectos](https://github.com/al064697/tomasalud-medical-system/projects) • 
+[📊 Insights](https://github.com/al064697/tomasalud-medical-system/pulse)
+
+**Hecho con ❤️ y ☕ por [Sebastian Eligio](https://github.com/al064697)**
+
+</div>
 
 
 
