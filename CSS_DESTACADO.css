@@ -1,0 +1,294 @@
+/* 🎨 TomaSalud - Código CSS Destacado */
+
+/* ═══════════════════════════════════════════════════════════════
+   🎯 SISTEMA DE VARIABLES CSS - Design Tokens
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+    /* 🎨 Colores Principales */
+    --primary: #41c1ba;          /* Verde azulado médico - Color de marca */
+    --primary-dark: #2d8b87;     /* Variación oscura para hovers */
+    --primary-light: #7dd3cf;    /* Variación clara para gradientes */
+    --secondary: #325866;        /* Azul grisáceo profesional */
+    --secondary-dark: #1e3d4a;   /* Contraste para elementos oscuros */
+    
+    /* 🌈 Colores de Superficie */
+    --background: #f8fafb;       /* Fondo suave y limpio */
+    --surface: #ffffff;          /* Superficie de cards y modales */
+    --surface-elevated: #ffffff;  /* Superficies elevadas */
+    
+    /* 📝 Tipografía */
+    --text-primary: #1a202c;     /* Texto principal - Alta legibilidad */
+    --text-secondary: #718096;   /* Texto secundario - Información complementaria */
+    --text-muted: #a0aec0;       /* Texto tenue - Estados vacíos */
+    
+    /* 🔳 Bordes */
+    --border: #e2e8f0;           /* Bordes sutiles */
+    --border-light: #f1f5f9;     /* Bordes ultra-suaves */
+    
+    /* 🚦 Estados Semánticos */
+    --success: #48bb78;          /* Verde - Éxito/Medicamento tomado */
+    --warning: #ed8936;          /* Naranja - Advertencia/Próximo */
+    --error: #f56565;            /* Rojo - Error/Medicamento perdido */
+    
+    /* 🌟 Sombras Dinámicas */
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);      /* Sombra sutil */
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);   /* Sombra media */
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1); /* Sombra grande */
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1); /* Sombra extra */
+    
+    /* 🔄 Border Radius */
+    --radius-sm: 6px;           /* Esquinas pequeñas */
+    --radius-md: 8px;           /* Esquinas medianas */
+    --radius-lg: 12px;          /* Esquinas grandes */
+    --radius-xl: 16px;          /* Esquinas extra grandes */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   🏗️ LAYOUT GRID MODERNO - CSS Grid
+   ═══════════════════════════════════════════════════════════════ */
+
+.app-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;    /* Sidebar fijo + contenido fluido */
+    grid-template-rows: auto 1fr;        /* Header automático + main expandible */
+    grid-template-areas: 
+        "sidebar header"                  /* Área superior */
+        "sidebar main";                   /* Área principal */
+    height: 100vh;                       /* Altura completa de viewport */
+    overflow: hidden;                    /* Control de scroll por secciones */
+}
+
+/* 📱 Grid Responsivo para Cards */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;                          /* Espacio consistente */
+    margin-bottom: 2rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   🃏 SISTEMA DE CARDS - Componentes Modulares
+   ═══════════════════════════════════════════════════════════════ */
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);    /* Esquinas modernas */
+    padding: 0;                         /* Padding interno controlado */
+    box-shadow: var(--shadow-sm);       /* Sombra sutil inicial */
+    transition: all 0.3s ease;         /* Transición suave */
+    overflow: hidden;                   /* Control de contenido */
+}
+
+/* 🎭 Efecto Hover Elegante */
+.card:hover {
+    box-shadow: var(--shadow-lg);       /* Sombra más pronunciada */
+    transform: translateY(-2px);       /* Elevación sutil */
+}
+
+/* 📋 Header de Card con Gradiente */
+.card-header {
+    padding: 1.5rem 2rem 1rem;
+    border-bottom: 1px solid var(--border-light);
+    background: linear-gradient(135deg, var(--surface) 0%, #fafbfc 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   🔘 SISTEMA DE BOTONES - Interacciones Premium
+   ═══════════════════════════════════════════════════════════════ */
+
+.btn {
+    display: inline-flex;               /* Flex para alineación de iconos */
+    align-items: center;
+    gap: 0.5rem;                       /* Espacio entre icono y texto */
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 500;                  /* Peso medio para legibilidad */
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;        /* Transición rápida */
+    white-space: nowrap;               /* Evita quiebre de línea */
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);   /* Color más oscuro en hover */
+    transform: translateY(-1px);      /* Elevación micro */
+    box-shadow: var(--shadow-md);      /* Sombra en hover */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   🗂️ NAVEGACIÓN LATERAL - Sidebar Elegante
+   ═══════════════════════════════════════════════════════════════ */
+
+.sidebar {
+    grid-area: sidebar;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 2rem 0;
+    overflow-y: auto;
+}
+
+/* 🏷️ Branding con Gradiente */
+.brand-logo {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(45deg, var(--primary), var(--primary-light));
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+/* 🔗 Enlaces de Navegación Interactivos */
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: var(--primary);        /* Fondo de marca */
+    color: white;
+    transform: translateX(4px);        /* Deslizamiento sutil */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   🪟 SISTEMA MODAL - Overlays Profesionales
+   ═══════════════════════════════════════════════════════════════ */
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.6);    /* Overlay semitransparente */
+    backdrop-filter: blur(4px);        /* Efecto de difuminado moderno */
+    z-index: 1000;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.modal-content {
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);      /* Sombra dramática */
+    max-width: 500px;
+    margin: 2rem auto;
+    animation: modalSlideUp 0.3s ease-out;  /* Animación de entrada */
+}
+
+/* 🎬 Animación de Entrada del Modal */
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);  /* Entrada desde abajo */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);        /* Posición final */
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   👤 AVATAR Y PERFIL DE USUARIO
+   ═══════════════════════════════════════════════════════════════ */
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;                /* Círculo perfecto */
+    background: linear-gradient(45deg, var(--primary), var(--primary-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   📱 RESPONSIVE DESIGN - Mobile First
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .app-container {
+        grid-template-columns: 1fr;     /* Stack en mobile */
+        grid-template-areas: 
+            "header"
+            "main";
+    }
+    
+    .sidebar {
+        display: none;                  /* Ocultar sidebar en mobile */
+    }
+    
+    .cards-grid {
+        grid-template-columns: 1fr;    /* Una columna en mobile */
+        gap: 1rem;                     /* Espacio reducido */
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ✨ MICRO-INTERACCIONES - Detalles que Importan
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 🎯 Estado Focus Accesible */
+*:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* 🎨 Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* 💫 Optimización de Fuentes */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;     /* Suavizado en WebKit */
+    -moz-osx-font-smoothing: grayscale;      /* Suavizado en Firefox */
+    text-rendering: optimizeLegibility;      /* Optimización de renderizado */
+}
+
+/* 🔄 Estados de Carga */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px; height: 20px;
+    border: 2px solid var(--primary);
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
